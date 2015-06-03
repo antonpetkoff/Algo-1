@@ -1,7 +1,5 @@
 package brackets;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -17,14 +15,7 @@ public class Brackets {
         }
     }
 
-    private static Map<Integer, Character> openingByPriority;
-
-    public static void initOpeningByPriority() {
-        openingByPriority = new HashMap<>();
-        openingByPriority.put(3, '{');
-        openingByPriority.put(2, '[');
-        openingByPriority.put(1, '(');
-    }
+    private static final String PRIORITY = "([{";
 
     public static char matchingClosing(char opening) {
         if (opening == '{') {
@@ -34,7 +25,6 @@ public class Brackets {
         } else if (opening == '(') {
             return ')';
         }
-
         throw new IllegalArgumentException("invalid opening brace!");
     }
 
@@ -50,24 +40,11 @@ public class Brackets {
         return isOpening(brace) || isClosing(brace);
     }
 
-    public static int priority(char brace) {
-        if (brace == '{' || brace == '}') {
-            return 3;
-        } else if (brace == '[' || brace == ']') {
-            return 2;
-        } else if (brace == '(' || brace == ')') {
-            return 1;
-        }
-
-        throw new IllegalArgumentException("invalid brace!");
-    }
-
     public static boolean isValidExpression(String expr) {
         if (expr.length() < 2 || !isBrace(expr.charAt(0)) || !isBrace(expr.charAt(expr.length() - 1))) {
             return false;
         }
 
-        initOpeningByPriority();
         Stack<Pair> stack = new Stack<Pair>();
         char symbol;
 
@@ -77,30 +54,27 @@ public class Brackets {
                 continue;
             }
 
-            // validate expected element
-            if (!stack.isEmpty()) {
+            if (!stack.isEmpty()) {             // validate expected element
                 if (!(stack.peek().opening == symbol || stack.peek().closing == symbol)) {
                     return false;
                 }
             }
 
-            // handle stack invariant
-            if (isClosing(symbol)) {
+            if (isClosing(symbol)) {            // handle stack invariant
                 if (stack.isEmpty() || (stack.size() == 1 && i < expr.length() - 1)) {
                     return false;
                 }
                 stack.pop();
             } else if (isOpening(symbol)) {
                 Pair newExpected = new Pair();
-                if (priority(symbol) > 1) {
-                    newExpected.opening = openingByPriority.get(priority(symbol) - 1);
+                if (PRIORITY.indexOf(symbol) > 0) {
+                    newExpected.opening = PRIORITY.charAt(PRIORITY.indexOf(symbol) - 1);
                 }
                 newExpected.closing = matchingClosing(symbol);
                 stack.push(newExpected);
             } else {
                 throw new IllegalArgumentException("Invalid expression format!");
             }
-
         }
 
         return stack.isEmpty();
@@ -111,10 +85,10 @@ public class Brackets {
         String temp = stack.pop();
 
         while (!isOpening(temp.charAt(0))) {
-            if (temp.charAt(0) == '+') { // already evaluated
+            if (temp.charAt(0) == '+') {            // already evaluated
                 sum += Integer.valueOf(temp);
-                base = 1; // reset base
-            } else { // unevaluated digit
+                base = 1;
+            } else {                                // unevaluated digit
                 sum += base * Integer.valueOf(temp);
                 base *= 10;
             }
