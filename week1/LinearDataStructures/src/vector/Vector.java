@@ -3,34 +3,34 @@ package vector;
 public class Vector<T> implements VectorInterface<T> {
 
     private T[] array;
-    private int size;       //  index to the first empty element
-    
+    private int size; // index to the first empty element
+
     static final float GROWTH_RATE = 2.0f;
     static final int INITIAL_CAPACITY = 8;
-    
+
     @SuppressWarnings("unchecked")
     Vector() {
         array = (T[]) new Object[0];
         size = 0;
     }
-    
+
     @SuppressWarnings("unchecked")
     Vector(int initCapacity, T value) {
         array = (T[]) new Object[initCapacity];
-        
+
         for (int i = 0; i < initCapacity; ++i) {
             array[i] = value;
         }
     }
-    
+
     @Override
     public void insert(int index, T value) {
         if (size == array.length) {
             resize((int) (capacity() == 0 ? INITIAL_CAPACITY : GROWTH_RATE * array.length));
         }
-        
+
         array[size] = value;
-        swapLeft(array, index, size);
+        leftSwaps(array, index, size);
         ++size;
     }
 
@@ -39,7 +39,7 @@ public class Vector<T> implements VectorInterface<T> {
         if (size == array.length) {
             resize((int) (capacity() == 0 ? INITIAL_CAPACITY : GROWTH_RATE * array.length));
         }
-        
+
         array[size++] = value;
     }
 
@@ -48,13 +48,14 @@ public class Vector<T> implements VectorInterface<T> {
         if (index < size) {
             return array[index];
         }
-        
+
         throw new IllegalArgumentException("Out of bounds!");
     }
 
     @Override
     public void remove(int index) {
-        // TODO
+        rightSwaps(array, index, array.length - 1);
+        array[--size] = null;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class Vector<T> implements VectorInterface<T> {
             array[size] = null;
             return result;
         }
-        
+
         throw new IllegalStateException("No elements to pop!");
     }
 
@@ -77,20 +78,20 @@ public class Vector<T> implements VectorInterface<T> {
     public int capacity() {
         return array.length;
     }
-    
+
     private void copyElements(T[] source, int from, int to, T[] destination) {
         for (int i = from; i < to; i++) {
             destination[i] = source[i];
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private void resize(int capacity) {
         T[] newArray = (T[]) new Object[capacity];
         copyElements(array, 0, array.length, newArray);
         array = newArray;
     }
-    
+
     /**
      * takes an interval [begin , end] and takes the element at position end
      * moves it to position begin with adjacent swaps.
@@ -99,7 +100,7 @@ public class Vector<T> implements VectorInterface<T> {
      * @param from
      * @param to
      */
-    static <T> void swapLeft(T[] array, int begin, int end) {
+    static <T> void leftSwaps(T[] array, int begin, int end) {
         T temp = array[end];
         while (begin != end) {
             array[end] = array[end - 1];
@@ -108,4 +109,13 @@ public class Vector<T> implements VectorInterface<T> {
         array[end] = temp;
     }
     
+    static <T> void rightSwaps(T[] array, int begin, int end) {
+        T temp = array[begin];
+        while (begin != end) {
+            array[begin] = array[begin + 1];
+            ++begin;
+        }
+        array[begin] = temp;
+    }
+
 }
