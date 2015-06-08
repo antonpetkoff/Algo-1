@@ -45,15 +45,14 @@ public class Vector<T> implements VectorInterface<T> {
 
     @Override
     public T get(int index) {
-        if (index < size) {
-            return array[index];
-        }
-
-        throw new IllegalArgumentException("Out of bounds!");
+        boundsCheck(index, size);
+        return array[index];
     }
 
     @Override
     public void remove(int index) {
+        boundsCheck(index, size);
+        
         rightSwaps(array, index, array.length - 1);
         array[--size] = null;
     }
@@ -116,6 +115,12 @@ public class Vector<T> implements VectorInterface<T> {
             ++begin;
         }
         array[begin] = temp;
+    }
+    
+    private static void boundsCheck(int index, int size) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException("Out of bounds!");
+        }
     }
 
 }
