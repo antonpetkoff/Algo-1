@@ -96,8 +96,8 @@ public class Vector<T> implements VectorInterface<T> {
      * moves it to position begin with adjacent swaps.
      * 
      * @param array
-     * @param from
-     * @param to
+     * @param begin
+     * @param end
      */
     static <T> void leftSwaps(T[] array, int begin, int end) {
         T temp = array[end];
