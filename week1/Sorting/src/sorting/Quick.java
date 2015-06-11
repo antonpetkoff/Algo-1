@@ -15,7 +15,7 @@ public class Quick {
         // swaps
         int i = lo, j = hi;
         
-        while (i < j) {
+        while (i <= j) {
             while (Utils.lessThan(arr[i], pivot)) {
                 ++i;
             }
@@ -24,7 +24,7 @@ public class Quick {
                 --j;
             }
             
-            if (i < j) {
+            if (i <= j) {
                 Utils.swap(arr, i, j);
                 ++i;
                 --j;
@@ -33,10 +33,10 @@ public class Quick {
         
         // recur
         if (i < hi) {
-            quickSort(arr, lo, j);
-        }
-        if (j > lo) {
             quickSort(arr, i, hi);
+        }
+        if (lo < j) {
+            quickSort(arr, lo, j);
         }
     }
     

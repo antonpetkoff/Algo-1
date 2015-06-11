@@ -10,11 +10,11 @@ public class Insertion {
         for (int i = 1; i < arr.length; ++i) {
             T hand = arr[i];
             j = i;
-            while (j > 0 && Utils.lessThan(arr[j], arr[j-1])) {
-                arr[j - 1] = arr[j];
+            while (j > 0 && Utils.lessThan(hand, arr[j - 1])) {
+                arr[j] = arr[j - 1];
                 --j;
             }
-            arr[i] = hand;
+            arr[j] = hand;
         }
     }
     

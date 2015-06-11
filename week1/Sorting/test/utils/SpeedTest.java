@@ -22,7 +22,7 @@ public class SpeedTest {
                 numbers[row][col] = temp;
             }
         }
-        
+
         Long[] runningTimes = new Long[SORTERS_COUNT];
         long start = System.currentTimeMillis();
         Selection.sort(numbers[0]);
@@ -37,10 +37,11 @@ public class SpeedTest {
         runningTimes[2] = System.currentTimeMillis() - start;
         
         start = System.currentTimeMillis();
-        Quick.sort(numbers[2]);
+        Quick.sort(numbers[3]);
         runningTimes[3] = System.currentTimeMillis() - start;
        
         Utils.printArray(runningTimes);
+
     }
     
     public static void main(String[] args) {

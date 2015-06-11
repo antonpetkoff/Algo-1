@@ -11,7 +11,7 @@ import org.junit.Test;
 public class TestSorting {
 
     private Integer[] numbers;
-    private static final int SIZE = 1000;
+    private static final int SIZE = 10000;
     private Random rand = new Random();
     
     @Before
