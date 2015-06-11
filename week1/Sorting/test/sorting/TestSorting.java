@@ -41,4 +41,13 @@ public class TestSorting {
         assertTrue(Utils.isSorted(numbers));
     }
     
+    @Test
+    public void testMerge() {
+        assertFalse(Utils.isSorted(numbers));
+        
+        Merge.sort(numbers);
+        
+        assertTrue(Utils.isSorted(numbers));
+    }
+    
 }
