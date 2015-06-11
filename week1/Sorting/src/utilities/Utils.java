@@ -10,8 +10,8 @@ public class Utils {
         array[b] = temp;
     }
     
-    public static <T extends Comparable<T>> boolean lessThan(T a, T b) {
-        return a.compareTo(b) < 0;
+    public static <T extends Comparable<T>> boolean lessThan(T arr, T arr2) {
+        return arr.compareTo(arr2) < 0;
     }
     
     public static <T> void shuffle(T[] array) {

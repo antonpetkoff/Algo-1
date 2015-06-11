@@ -50,4 +50,18 @@ public class TestSorting {
         assertTrue(Utils.isSorted(numbers));
     }
     
+    @Test
+    public void testQuick() {
+        assertFalse(Utils.isSorted(numbers));
+        
+        Quick.sort(numbers);
+        
+        assertTrue(Utils.isSorted(numbers));
+        
+        Quick.sort(numbers);
+        
+        assertTrue(Utils.isSorted(numbers));
+        
+    }
+    
 }
