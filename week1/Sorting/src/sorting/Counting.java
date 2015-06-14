@@ -27,7 +27,7 @@ public class Counting {
             buckets[i] += buckets[i - 1];
         }
         
-        for (int i = 0; i < N; ++i) {
+        for (int i = N - 1; i >= 0; --i) {      // make stable
             sorted[buckets[arr[i]] - 1] = arr[i];
             --buckets[arr[i]];
         }
