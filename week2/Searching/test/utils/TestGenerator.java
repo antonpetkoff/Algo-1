@@ -7,6 +7,7 @@ import static utils.Utils.*;
 
 public class TestGenerator {
 
+    private static final int NOT_FOUND = -1;
     public static Random rand = new Random();
     
     public static Integer[] generateSortedArrayLinear(int n) {
@@ -35,12 +36,15 @@ public class TestGenerator {
     
     public static int linearSearch(Integer[] arr, Integer key) {
         for (int i = 0; i < arr.length; ++i) {
-            if ()
+            if (arr[i].equals(key)) {
+                return i;
+            }
         }
+        return NOT_FOUND;
     }
     
     public static void main(String[] args) {
-        printArray(generateSortedArray(10));
+        printArray(generateSortedArray(1000));
     }
     
 }
