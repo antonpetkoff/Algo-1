@@ -14,22 +14,20 @@ public class Binary {
      * @return  the leftmost index of key
      */
     public static <T extends Comparable<T>> int search(T[] arr, T key) {
-        int lo = 0, hi = arr.length - 1, mid = 0, decision = 0;
+        int lo = 0, hi = arr.length - 1, mid = 0;
         
         while (hi - lo >= 0) {
             mid = lo + (hi - lo)/2;
-            decision = lessThan(arr[mid], key) ? 0 : 1;
-            if (decision == 1) {
+            if (lessThan(arr[mid], key)) {
+                lo = mid + 1;
+            } else {
                 if (hi - lo == 0) {
                     return arr[mid].equals(key) ? mid : NOT_FOUND;
                 }
                 hi = mid;
-            } else {
-                lo = mid + 1;
             }
         }
         
-        // catch special cases?
         return NOT_FOUND;
     }
     
