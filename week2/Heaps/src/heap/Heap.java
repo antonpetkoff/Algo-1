@@ -1,7 +1,6 @@
 package heap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -114,14 +113,5 @@ public class Heap<T extends Comparable<T>> {
             arr.set(i, extractMin());
         }
     }
-    
-    public static void main(String[] args) {
-        List<Integer> arr = Arrays.asList(8, 5, 4, 0, 3, 4, 2, 1);
-        (new Heap<Integer>()).sort(arr);
         
-        for (int i = 0; i < arr.size(); ++i) {
-            System.out.print(arr.get(i) + " ");
-        }
-    }
-    
 }

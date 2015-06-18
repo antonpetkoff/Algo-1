@@ -1,4 +1,4 @@
-package heap.sort;
+package heap;
 
 import static org.junit.Assert.*;
 
