@@ -2,6 +2,8 @@ package birthday.ranges;
 
 import java.util.Arrays;
 
+import utils.Tuple;
+
 public class BirthdayRanges {
 
     /**
@@ -33,7 +35,7 @@ public class BirthdayRanges {
      * @return list of integers where for each I in the list I equals the number
      *         of people with birthdays in the range ranges[i].
      */
-    public static Integer[] birthdaysCount(Integer[] birthdays, Range[] ranges) {
+    public static Integer[] birthdaysCount(Integer[] birthdays, Tuple[] ranges) {
         Integer[] buckets = new Integer[ranges.length];
         int left = 0, right = 0;
         Arrays.sort(birthdays);

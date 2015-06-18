@@ -1,11 +1,11 @@
-package birthday.ranges;
+package utils;
 
-public final class Range {
+public final class Tuple {
     
     public final int left;
     public final int right;
     
-    public Range(int left, int right) {
+    public Tuple(int left, int right) {
         this.left = left;
         this.right = right;
     }
