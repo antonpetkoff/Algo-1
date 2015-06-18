@@ -16,7 +16,7 @@ public class Heap<T extends Comparable<T>> {
     private int size;
     
     public Heap() {
-        this.heap = null;
+        this.heap = new ArrayList<T>(1);
         this.size = 0;
     }
     
@@ -48,6 +48,9 @@ public class Heap<T extends Comparable<T>> {
     }
     
     public void insert(T elem) {
+        if (size == heap.size()) {
+            heap.add(elem);
+        }
         heap.set(size, elem);
         siftUp(size);
         ++size;
@@ -110,6 +113,10 @@ public class Heap<T extends Comparable<T>> {
         for (int i = 0; i < arr.size(); ++i) {
             arr.set(i, extractMin());
         }
+    }
+    
+    public List<T> getState() {
+        return heap;
     }
 
     public static void main(String[] args) {
