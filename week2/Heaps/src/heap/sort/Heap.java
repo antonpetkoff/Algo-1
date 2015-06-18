@@ -1,13 +1,18 @@
 package heap.sort;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *  Min-Heap
  */
-public class Heap {
+public class Heap<T extends Comparable<T>> {
 
     public static final int ROOT_BOUND = -1;
     
-    private int[] heap;
+    private List<T> heap;
     private int size;
     
     public Heap() {
@@ -36,24 +41,28 @@ public class Heap {
             return;
         }
         
-        if (heap[i] < heap[parent(i)]) {
-            swap(heap, i, parent(i));
+        if (heap.get(i).compareTo(heap.get(parent(i))) < 0) {
+            Collections.swap(heap, i, parent(i));
             siftUp(parent(i));
         }
     }
     
-    public void insert(int elem) {
-        heap[size] = elem;
+    public void insert(T elem) {
+        heap.set(size, elem);
         siftUp(size);
         ++size;
     }
     
-    public void heapify(int[] elements, int size) {
-        this.heap = new int[size];
-        this.size = 0;
+    public void heapify(List<T> elements, int size) {
+        this.heap = new ArrayList<T>();
+        this.size = size;
         
         for (int i = 0; i < size; ++i) {
-            insert(elements[i]);
+            this.heap.add(elements.get(i));
+        }
+        
+        for (int i = size - 1; i >= 0; --i) {
+            siftDown(i);
         }
     }
     
@@ -64,57 +73,51 @@ public class Heap {
         // find smallest child
         for (int i = 0; i < 2; ++i) {
             if (childIndex + i < size) {
-                if (heap[childIndex + i] < heap[minIndex]) {
+                if (heap.get(childIndex + i).compareTo(heap.get(minIndex)) < 0) {
                     minIndex = childIndex + i;
                 }
             }
         }
         
         if (minIndex != p) {    // if smaller child exists
-            swap(heap, minIndex, p);
+            Collections.swap(heap, minIndex, p);
             siftDown(minIndex);
         }
     }
     
-    public int getMin() {
+    public T getMin() {
         if (size == 0) {
             throw new IllegalStateException("No elements in heap!");
         }
-        return heap[0];
+        return heap.get(0);
     }
     
-    public int extractMin() {
+    public T extractMin() {
         if (size == 0) {
             throw new IllegalStateException("No elements in heap!");
         }
         
-        int min = heap[0];
-        heap[0] = heap[size - 1];
+        T min = heap.get(0);
+        heap.set(0, heap.get(size - 1));
         --size;
         siftDown(0);
         return min;
     }
     
-    public void sort(int[] arr) {
-        heapify(arr, arr.length);
+    public void sort(List<T> arr) {
+        heapify(arr, arr.size());
         
-        for (int i = 0; i < arr.length; ++i) {
-            arr[i] = extractMin();
+        for (int i = 0; i < arr.size(); ++i) {
+            arr.set(i, extractMin());
         }
     }
-    
-    private static void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-    
+
     public static void main(String[] args) {
-        int[] arr = new int[] {8, 5, 4, 0, 3, 4, 2, 1};
-        (new Heap()).sort(arr);
+        List<Integer> arr = Arrays.asList(8, 5, 4, 0, 3, 4, 2, 1);
+        (new Heap<Integer>()).sort(arr);
         
-        for (int i = 0; i < arr.length; ++i) {
-            System.out.print(arr[i] + " ");
+        for (int i = 0; i < arr.size(); ++i) {
+            System.out.print(arr.get(i) + " ");
         }
     }
     
