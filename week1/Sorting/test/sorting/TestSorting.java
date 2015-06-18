@@ -12,6 +12,7 @@ public class TestSorting {
 
     private Integer[] numbers;
     private static final int SIZE = 10000;
+    private static final int MAX_VALUE = 10000;
     private Random rand = new Random();
 
     @Before
@@ -19,7 +20,7 @@ public class TestSorting {
         numbers = new Integer[SIZE];
 
         for (int i = 0; i < SIZE; ++i) {
-            numbers[i] = rand.nextInt(10);
+            numbers[i] = rand.nextInt(MAX_VALUE);
         }
     }
 

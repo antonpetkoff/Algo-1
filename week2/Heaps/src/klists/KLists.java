@@ -1,6 +1,6 @@
 package klists;
 
-import heap.sort.Heap;
+import heap.Heap;
 
 import java.util.Arrays;
 import java.util.List;
