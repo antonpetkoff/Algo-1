@@ -24,7 +24,7 @@ public class TestBirthdayRanges {
     
     @Test
     public void testBirthdayRanges2() {
-        Integer[] birthdays = (Integer[]) Arrays.asList(1, 2, 3, 3, 6, 25, 52).toArray();
+        Integer[] birthdays = (Integer[]) Arrays.asList(3, 6, 1, 25, 3, 52, 2).toArray();
         Range[] ranges = new Range[] { new Range(2, 7), new Range(2, 80), new Range(0, 0), new Range(150, 160) };
         Integer[] counts = birthdaysCount(birthdays, ranges);
         
