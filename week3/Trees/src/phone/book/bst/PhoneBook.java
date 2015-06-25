@@ -12,6 +12,11 @@ public class PhoneBook {
         }
 
         @Override
+        public String toString() {
+            return name + " " + number;
+        }
+        
+        @Override
         public int compareTo(Contact o) {
             return name.compareTo(o.name);
         }
@@ -45,4 +50,8 @@ public class PhoneBook {
         bst.remove(new Contact(name, 0));
     }
 
+    public int size() {
+        return bst.size();
+    }
+    
 }

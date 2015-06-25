@@ -34,17 +34,20 @@ public class BinarySearchTree<T extends Comparable<T>> {
      * this 3-way if-else block rewrites equal elements
      * equal elements can be supported if the last else block is removed
      * and equality is added to one of the first two conditions
+     * and don't forget to handle the size counter!
      */
     private void insertNode(Node<T> root, Node<T> newNode) {
         if (newNode.item.compareTo(root.item) < 0) {
             if (root.left == null) {
                 root.left = newNode;
+                ++size;
             } else {
                 insertNode(root.left, newNode);
             }
         } else if (newNode.item.compareTo(root.item) > 0) {
             if (root.right == null) {
                 root.right = newNode;
+                ++size;
             } else {
                 insertNode(root.right, newNode);
             }
@@ -58,11 +61,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
         
         if (root == null) {
             root = newNode;
+            ++size;
         } else {
             insertNode(root, newNode);            
         }
-        
-        ++size;
     }
     
     private void traverseNodes(Node<T> root) {
@@ -179,6 +181,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
     public void remove(T elem) {
         Node<T> current = findNode(elem);
         removeNode(current);
+        --size;
     }
     
     public static void main(String[] args) {
