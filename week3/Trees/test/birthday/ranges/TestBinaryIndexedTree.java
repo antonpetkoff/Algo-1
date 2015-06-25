@@ -46,6 +46,7 @@ public class TestBinaryIndexedTree {
         assertEquals(4, bit.query(3));
         assertEquals(7, bit.query(4));
         assertEquals(9, bit.query(5));
+        assertEquals(9, bit.query(6));
     }
     
     @Test

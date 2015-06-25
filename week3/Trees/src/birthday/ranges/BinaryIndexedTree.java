@@ -56,6 +56,10 @@ public class BinaryIndexedTree {
     public int query(int bound) {
         boundsCheck(bound);
 
+        if (bound == tree.length / 2 - 1) {
+            return tree[tree.length - 1];
+        }
+        
         int sum = 0;
         int i = tree.length / 2 + 1 + bound;
         while (i != 0) { // while pointer != root
@@ -80,7 +84,7 @@ public class BinaryIndexedTree {
     }
 
     private void boundsCheck(int bound) {
-        if (bound < 0 || bound > initialCapacity - 1) {
+        if (bound < 0 || bound > tree.length - 1) {
             throw new IllegalArgumentException("Out of bounds!");
         }
     }
