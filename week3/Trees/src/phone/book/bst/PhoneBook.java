@@ -2,7 +2,7 @@ package phone.book.bst;
 
 public class PhoneBook {
 
-    public static final class Contact {
+    public static final class Contact implements Comparable<Contact> {
         public final String name;
         public final int number;
 
@@ -10,26 +10,39 @@ public class PhoneBook {
             this.name = name;
             this.number = number;
         }
+
+        @Override
+        public int compareTo(Contact o) {
+            return name.compareTo(o.name);
+        }
     }
 
+    private BinarySearchTree<Contact> bst;
+    public static final int NOT_FOUND = -1;
+    
+    public PhoneBook() {
+        bst = new BinarySearchTree<Contact>();
+    }
+    
     // inserts a new contact
     public void insert(Contact contact) {
-        // TODO
+        bst.insert(contact);
     }
 
     // lookup a name and print its phone number
     public int lookup(String name) {
-        // TODO
-        return 0;
+        Contact result = bst.search(new Contact(name, 0));
+        return result == null ? NOT_FOUND : result.number;
     }
 
     // list all records in an alphabetical order
     public void list() {
-        // TODO
+        bst.traverse();
     }
 
     // remove a record for a given name
     public void remove(String name) {
-        // TODO
+        bst.remove(new Contact(name, 0));
     }
+
 }

@@ -30,19 +30,26 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return size;
     }
     
+    /*
+     * this 3-way if-else block rewrites equal elements
+     * equal elements can be supported if the last else block is removed
+     * and equality is added to one of the first two conditions
+     */
     private void insertNode(Node<T> root, Node<T> newNode) {
-        if (newNode.item.compareTo(root.item) <= 0) {
+        if (newNode.item.compareTo(root.item) < 0) {
             if (root.left == null) {
                 root.left = newNode;
             } else {
                 insertNode(root.left, newNode);
             }
-        } else {
+        } else if (newNode.item.compareTo(root.item) > 0) {
             if (root.right == null) {
                 root.right = newNode;
             } else {
                 insertNode(root.right, newNode);
             }
+        } else {
+            root.item = newNode.item;   // rewrite equal items
         }
     }
     
