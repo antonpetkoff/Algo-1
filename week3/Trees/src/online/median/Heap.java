@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Heap<T extends Comparable<T>> {
+public class Heap<T> {
 
     public static final int ROOT_BOUND = -1;
     
