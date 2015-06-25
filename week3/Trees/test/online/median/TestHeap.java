@@ -3,7 +3,6 @@ package online.median;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -30,12 +29,8 @@ public class TestHeap {
     
     @Test
     public void testHeapSortAscending() {
-        (new Heap<Integer>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1.compareTo(o2);
-            }
-        })).sort(numbers);
+
+        new Heap<Integer>((o1, o2) -> o1.compareTo(o2)).sort(numbers);
         
         for (int i = 1; i < SIZE; ++i) {
             assertTrue(numbers.get(i - 1).compareTo(numbers.get(i)) <= 0);
@@ -44,12 +39,7 @@ public class TestHeap {
     
     @Test
     public void testHeapSortDescending() {
-        (new Heap<Integer>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o2.compareTo(o1);
-            }
-        })).sort(numbers);
+        new Heap<Integer>((o1, o2) -> o2.compareTo(o1)).sort(numbers);
         
         for (int i = 1; i < SIZE; ++i) {
             assertTrue(numbers.get(i - 1).compareTo(numbers.get(i)) >= 0);

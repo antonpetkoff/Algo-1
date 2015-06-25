@@ -83,14 +83,14 @@ public class Heap<T extends Comparable<T>> {
         }
     }
     
-    public T getMin() {
+    public T peek() {
         if (size == 0) {
             throw new IllegalStateException("No elements in heap!");
         }
         return heap.get(0);
     }
     
-    public T extractMin() {
+    public T remove() {
         if (size == 0) {
             throw new IllegalStateException("No elements in heap!");
         }
@@ -106,7 +106,7 @@ public class Heap<T extends Comparable<T>> {
         heapify(arr, arr.size());
         
         for (int i = 0; i < arr.size(); ++i) {
-            arr.set(i, extractMin());
+            arr.set(i, remove());
         }
     }
         
