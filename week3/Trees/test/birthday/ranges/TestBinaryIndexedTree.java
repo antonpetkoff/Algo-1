@@ -48,4 +48,29 @@ public class TestBinaryIndexedTree {
         assertEquals(9, bit.query(5));
     }
     
+    @Test
+    public void testUpdate() {
+        bit.update(0, 5);
+        bit.update(3, 5);
+        
+        assertEquals(6, bit.tree[N + 0]);
+        assertEquals(2, bit.tree[N + 1]);
+        assertEquals(1, bit.tree[N + 2]);
+        assertEquals(5, bit.tree[N + 3]);
+        assertEquals(3, bit.tree[N + 4]);
+        assertEquals(2, bit.tree[N + 5]);
+        assertEquals(0, bit.tree[N + 6]);
+        assertEquals(0, bit.tree[N + 7]);
+        
+        assertEquals(0, bit.tree[N - 1]);
+        assertEquals(5, bit.tree[N - 2]);
+        assertEquals(6, bit.tree[N - 3]);
+        assertEquals(8, bit.tree[N - 4]);
+        
+        assertEquals(5, bit.tree[N - 5]);
+        assertEquals(14, bit.tree[N - 6]);
+        
+        assertEquals(19, bit.tree[N - 7]);
+    }
+    
 }
