@@ -8,7 +8,7 @@ public class BandwidthManager {
         ICMP, UDP, RTM, IGMP, DNS, TCP
     }
 
-    public final class Packet {
+    public static final class Packet {
         public final String protocol;
         public final String payload;
 
