@@ -1,10 +1,26 @@
 package birthday.ranges;
 
 import java.util.Arrays;
-
-import utils.Tuple;
+import java.util.Scanner;
 
 public class BirthdayRanges {
+
+    public static final class Tuple {
+
+        public final int left;
+        public final int right;
+
+        public Tuple(int left, int right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + left + "," + right + "]";
+        }
+
+    }
 
     /**
      * @param arr
@@ -48,8 +64,7 @@ public class BirthdayRanges {
                 --right;
             }
 
-            if (right == left && !birthdays[left].equals(ranges[i].left)
-                    && !birthdays[right].equals(ranges[i].right)) {
+            if (right == left && !birthdays[left].equals(ranges[i].left) && !birthdays[right].equals(ranges[i].right)) {
                 buckets[i] = 0;
             } else {
                 buckets[i] = right - left + 1;
@@ -57,6 +72,29 @@ public class BirthdayRanges {
         }
 
         return buckets;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int peopleCount = scanner.nextInt(), rangesCount = scanner.nextInt();
+        Integer[] birthdays = new Integer[peopleCount];
+        Tuple[] ranges = new Tuple[rangesCount];
+
+        for (int i = 0; i < peopleCount; ++i) {
+            birthdays[i] = scanner.nextInt();
+        }
+
+        for (int i = 0; i < rangesCount; ++i) {
+            ranges[i] = new Tuple(scanner.nextInt(), scanner.nextInt());
+        }
+
+        scanner.close();
+
+        Integer[] result = birthdaysCount(birthdays, ranges);
+
+        for (Integer integer : result) {
+            System.out.println(integer);
+        }
     }
 
 }
