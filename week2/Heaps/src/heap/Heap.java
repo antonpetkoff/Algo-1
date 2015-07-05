@@ -3,6 +3,7 @@ package heap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  *  Min-Heap
@@ -112,6 +113,24 @@ public class Heap<T extends Comparable<T>> {
         for (int i = 0; i < arr.size(); ++i) {
             arr.set(i, extractMin());
         }
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int count = scanner.nextInt();
+        List<Integer> numbers = new ArrayList<Integer>(count);
+        
+        for (int i = 0; i < count; ++i) {
+            numbers.add(scanner.nextInt());
+        }
+        
+        new Heap<Integer>().sort(numbers);
+            
+        for (int i = 0; i < count; ++i) {
+            System.out.print(numbers.get(i) + " ");
+        }
+        
+        scanner.close();
     }
         
 }
