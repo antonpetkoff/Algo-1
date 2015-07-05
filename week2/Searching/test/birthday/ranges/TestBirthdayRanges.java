@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import utils.Tuple;
 import static birthday.ranges.BirthdayRanges.birthdaysCount;
+import static birthday.ranges.BirthdayRanges.Tuple;
 import static org.junit.Assert.*;
 
 public class TestBirthdayRanges {
