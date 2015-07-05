@@ -83,21 +83,20 @@ public class PhoneBook {
         Scanner scanner = new Scanner(System.in);
         int phoneBookLength = scanner.nextInt(), queriesCount = scanner.nextInt();
         List<Contact> phoneBook = new ArrayList<Contact>();
-        List<Integer> numbers = new ArrayList<Integer>();
         
         for (int i = 0; i < phoneBookLength; ++i) {
             phoneBook.add(new Contact(scanner.nextInt(), scanner.next()));
         }
         
+        Collections.sort(phoneBook);
+        
         for (int i = 0; i < queriesCount; ++i) {
-            numbers.add(scanner.nextInt());
+            int index = interpolationSearch(phoneBook, scanner.nextInt());            
+            System.out.print(index != NOT_FOUND ? phoneBook.get(index).name : NOT_FOUND);
+            System.out.println();
         }
         
         scanner.close();
-        
-        List<String> result = lookupNames(phoneBook, numbers);
-        
-        result.stream().forEach(System.out::println);
     }
     
 }
