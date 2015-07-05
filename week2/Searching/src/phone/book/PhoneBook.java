@@ -3,6 +3,7 @@ package phone.book;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 public class PhoneBook {
 
@@ -78,4 +79,25 @@ public class PhoneBook {
         return result;
     }
 
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int phoneBookLength = scanner.nextInt(), queriesCount = scanner.nextInt();
+        List<Contact> phoneBook = new ArrayList<Contact>();
+        List<Integer> numbers = new ArrayList<Integer>();
+        
+        for (int i = 0; i < phoneBookLength; ++i) {
+            phoneBook.add(new Contact(scanner.nextInt(), scanner.next()));
+        }
+        
+        for (int i = 0; i < queriesCount; ++i) {
+            numbers.add(scanner.nextInt());
+        }
+        
+        scanner.close();
+        
+        List<String> result = lookupNames(phoneBook, numbers);
+        
+        result.stream().forEach(System.out::println);
+    }
+    
 }
