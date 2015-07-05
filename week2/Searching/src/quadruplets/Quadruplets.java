@@ -1,20 +1,13 @@
 package quadruplets;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Quadruplets {
-    
-    public static int[] min(int[] a, int[] b) {
-        return a.length < b.length ? a : b;
-    }
-    
-    /**
-     * lame O(N^3*logN)
-     * @return  the number of quadruplets that sum to zero.
-     */
-    public static int zeroQuadrupletsCount(int[] a, int[] b, int[] c, int[] d) {
-        //int[] min = min(a, min(b, min(c, d)));
 
+    public static final int LIST_COUNT = 4;
+    
+    public static int zeroQuadrupletsCount(int[] a, int[] b, int[] c, int[] d) {
         Arrays.sort(d);
         int count = 0;
         
@@ -29,6 +22,26 @@ public class Quadruplets {
         }
         
         return count;
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        int size = scanner.nextInt();
+        
+        int[][] lists = new int[LIST_COUNT][size];
+        
+        for (int i = 0; i < LIST_COUNT; ++i) {
+            for (int j = 0; j < size; ++j) {
+                lists[i][j] = scanner.nextInt();
+            }
+        }
+        
+        int result = zeroQuadrupletsCount(lists[0], lists[1], lists[2], lists[3]);
+        
+        System.out.println(result);
+        
+        scanner.close();
     }
     
 }
