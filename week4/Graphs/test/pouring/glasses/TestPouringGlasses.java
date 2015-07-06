@@ -2,19 +2,11 @@ package pouring.glasses;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import pouring.glasses.PouringGlasses.Triplet;
 
 public class TestPouringGlasses {
-
-    private PouringGlasses pg;
-    
-    @Before
-    public void setUp() {
-        pg = new PouringGlasses();
-    }
     
     @Test
     public void testPour() {
