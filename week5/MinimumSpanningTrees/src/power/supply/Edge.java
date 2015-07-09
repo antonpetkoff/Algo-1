@@ -6,15 +6,15 @@ package power.supply;
 public class Edge implements Comparable<Edge> {
     private final int first;
     private final int second;
-    private final double weight;
+    private final int weight;
 
-    public Edge(int a, int b, double weight) {
+    public Edge(int a, int b, int weight) {
         this.first = a;
         this.second = b;
         this.weight = weight;
     }
 
-    public double weight() {
+    public int weight() {
         return weight;
     }
 
@@ -33,15 +33,16 @@ public class Edge implements Comparable<Edge> {
 
     @Override
     public int compareTo(Edge that) {
-        if (this.weight() < that.weight())
-            return -1;
-        else if (this.weight() > that.weight())
-            return +1;
-        else
-            return 0;
+//        if (this.weight() < that.weight())
+//            return -1;
+//        else if (this.weight() > that.weight())
+//            return +1;
+//        else
+//            return 0;
+        return this.weight() - that.weight();
     }
 
     public String toString() {
-        return String.format("%d-%d %.2f", first, second, weight);
+        return String.format("%d %d %d", first, second, weight);
     }
 }

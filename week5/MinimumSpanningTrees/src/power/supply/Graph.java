@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *  Weighted graph - adjacency list
@@ -26,6 +27,14 @@ public class Graph {
         return edgeCount;
     }
     
+    public List<Edge> getEdgesFrom(int vertex) {
+        return adjacencyList.get(vertex);
+    }
+    
+    public Set<Integer> getVertices() {
+        return adjacencyList.keySet();
+    }
+    
     public void addEdge(Edge edge) {
         int vertex1 = edge.either(), vertex2 = edge.other(vertex1);
         
@@ -41,4 +50,8 @@ public class Graph {
         adjacencyList.get(vertex).add(edge);
     }
     
+    @Override
+    public String toString() {
+        return adjacencyList.toString();
+    }
 }
