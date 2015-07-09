@@ -57,7 +57,7 @@ public class MSTPrim {
         return totalWeight;
     }
     
-    public List<Edge> minimumSpanningTree() {
+    public List<Edge> mst() {
         return mst;
     }
     

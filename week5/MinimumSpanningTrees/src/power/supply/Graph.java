@@ -35,6 +35,10 @@ public class Graph {
         return adjacencyList.keySet();
     }
     
+    public Map<Integer, List<Edge>> getAdjacencyList() {
+        return adjacencyList;
+    }
+    
     public void addEdge(Edge edge) {
         int vertex1 = edge.either(), vertex2 = edge.other(vertex1);
         
