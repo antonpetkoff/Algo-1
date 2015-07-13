@@ -23,6 +23,15 @@ public class VitoshaRun {
         }
 
         @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Vertex) {
+                Vertex vert = (Vertex) obj;
+                return this.x == vert.x && this.y == vert.y;
+            }
+            return false;
+        }
+        
+        @Override
         public int compareTo(Vertex o) {
             return dist[this.x][this.y] - dist[o.x][o.y];
         }
@@ -64,11 +73,13 @@ public class VitoshaRun {
         for (int row = v.x - 1; row < v.x + 2; row++) {
             for (int col = v.y - 1; col < v.y + 2; col++) {
                 if (row >= 0 && row < matrix.length && col >= 0 && col < matrix.length
-                        && row != v.x && col != v.y) {
+                        && !(row == v.y && col == v.x)) {
                     neighbours.add(new Vertex(row, col));
                 }
             }
         }
+        System.out.println("\nNeighbours of " + v + ":");
+        neighbours.stream().forEach(s -> System.out.print(s + ", "));
         return neighbours;
     }
     
