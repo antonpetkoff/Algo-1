@@ -10,6 +10,12 @@ import power.supply.MSTPrim;
 
 public class SecondBestMST {
 
+    public static int maxEdgeWeightInCicyle(Edge edge) {
+        int start = edge.either(), end = edge.other(start);
+        // TODO
+        return 0;
+    }
+    
     public static int secondBestWeight(Graph graph) {
         MSTPrim best = new MSTPrim(graph);
         
