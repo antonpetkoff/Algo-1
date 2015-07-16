@@ -2,26 +2,32 @@ package hash.table;
 
 import static org.junit.Assert.*;
 
+import java.util.Random;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestHashTable {
 
-    private HashTable<Double> ht;
+    private HashTable ht;
     
     @Before
     public void setUp() {
-        ht = new HashTable<Double>();
+        ht = new HashTable();
     }
     
     @Test
-    public void testPut() {
+    public void testSize() {
         assertEquals(Integer.valueOf(0), Integer.valueOf(ht.size()));
         
+        Random rand = new Random();
+        int temp = 0;
         for (int i = 0; i < 10000; ++i) {
-            ht.put(Math.random());
-            assertEquals(Integer.valueOf(i), Integer.valueOf(ht.size()));
+            temp = rand.nextInt();
+            ht.put(temp, 1);
+            assertEquals(Integer.valueOf(i+1), Integer.valueOf(ht.size()));
+            assertTrue(ht.contains(temp));
         }
     }
-    
+
 }
