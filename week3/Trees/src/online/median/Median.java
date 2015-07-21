@@ -39,6 +39,21 @@ public class Median {
                 return;
             }
 
+            /**
+             * possible situation in a MAX heap:
+             * 
+             *         10
+             *       /    \
+             *     12      10
+             *    /  \     / \
+             *   8    6   7   1 <- this 1 is inserted and needs to sift up
+             *   
+             */
+            int sibling = i % 2 == 0 ? i - 1 : i + 1;
+            if (sibling < size && comp.compare(heap.get(sibling), heap.get(i)) < 0) {
+                Collections.swap(heap, sibling, i);
+            }
+            
             if (comp.compare(heap.get(i), heap.get(parent(i))) < 0) {
                 Collections.swap(heap, i, parent(i));
                 siftUp(parent(i));
