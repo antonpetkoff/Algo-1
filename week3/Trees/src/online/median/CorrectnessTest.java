@@ -8,8 +8,8 @@ public class CorrectnessTest {
     private static SortedSequence correct;
     
     private static final int TESTS = 1000;
-    private static final int ITERATIONS = 20;
-    private static final int BOUND = 30;
+    private static final int ITERATIONS = 2000;
+    private static final int BOUND = 300000;
     
     private static boolean foundFlag = false;
     

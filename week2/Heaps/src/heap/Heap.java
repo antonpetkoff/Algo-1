@@ -21,7 +21,7 @@ public class Heap<T extends Comparable<T>> {
     }
     
     public int parent(int i) {
-        return i == 0 ? ROOT_BOUND : i / 2;
+        return i == 0 ? ROOT_BOUND : (i - 1) / 2;
     }
     
     public int left(int i) {
