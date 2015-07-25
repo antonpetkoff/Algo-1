@@ -1,5 +1,7 @@
 package birthday.ranges;
 
+import java.util.Scanner;
+
 public class BirthdayRanges {
 
     private BinaryIndexedTree bit;
@@ -25,9 +27,30 @@ public class BirthdayRanges {
     }
     
     public static void main(String[] args) {
-        int values[] = {5, 10, 6, 7, 3, 4, 5, 11, 21, 300, 15};
+        Scanner scanner = new Scanner(System.in);
+    
+        int daysCount = scanner.nextInt(), commandsCount = scanner.nextInt();
+        int[] values = new int[daysCount];
+        
+        for (int i = 0; i < daysCount; i++) {
+            values[i] = scanner.nextInt();
+        }
+        
         BirthdayRanges br = new BirthdayRanges(values);
-        System.out.println(br.count(2, 10));
+        
+        String command = null;
+        for (int i = 0; i < commandsCount; ++i) {
+            command = scanner.next();
+            if (command.equals("count")) {
+                System.out.println(br.count(scanner.nextInt(), scanner.nextInt()));
+            } else if (command.equals("add")) {
+                br.add(scanner.nextInt(), scanner.nextInt());
+            } else if (command.equals("remove")) {
+                br.remove(scanner.nextInt(), scanner.nextInt());
+            }
+        }
+        
+        scanner.close();
     }
 
 }

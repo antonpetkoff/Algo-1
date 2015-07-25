@@ -11,14 +11,14 @@ public class TestPhoneBook {
     
     @Test
     public void testPhoneBookOperations() {
-        pb.insert(new Contact("Stanislav", 1));
-        pb.insert(new Contact("Rado", 15));
+        pb.insert(new Contact(1, "Stanislav"));
+        pb.insert(new Contact(15, "Rado"));
         assertEquals(2, pb.size());
         assertEquals(15, pb.lookup("Rado"));
         
-        pb.insert(new Contact("Ivan", 6));
+        pb.insert(new Contact(6, "Ivan"));
         assertEquals(6, pb.lookup("Ivan"));
-        pb.insert(new Contact("Ivan", 8));
+        pb.insert(new Contact(8, "Ivan"));
         assertEquals(8, pb.lookup("Ivan"));
         assertEquals(PhoneBook.NOT_FOUND, pb.lookup("Pesho"));
         assertEquals(3, pb.size());
@@ -26,10 +26,10 @@ public class TestPhoneBook {
         assertEquals(PhoneBook.NOT_FOUND, pb.lookup("Ivan"));
         assertEquals(2, pb.size());
         
-        pb.insert(new Contact("Ani", 23));
-        pb.insert(new Contact("Pesho", 44));
-        pb.insert(new Contact("Eli", 77));
-        pb.insert(new Contact("Georgi", 83));
+        pb.insert(new Contact(23, "Ani"));
+        pb.insert(new Contact(44, "Pesho"));
+        pb.insert(new Contact(77, "Eli"));
+        pb.insert(new Contact(83, "Georgi"));
         assertEquals(6, pb.size());
         
         pb.list();
