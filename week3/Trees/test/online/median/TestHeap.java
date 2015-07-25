@@ -9,7 +9,7 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
-import online.median.Heap;
+import online.median.Median.Heap;
 
 public class TestHeap {
     

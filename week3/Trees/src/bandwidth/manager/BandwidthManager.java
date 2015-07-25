@@ -1,6 +1,6 @@
 package bandwidth.manager;
 
-import online.median.Heap;
+import online.median.Median.Heap;
 
 public class BandwidthManager {
 

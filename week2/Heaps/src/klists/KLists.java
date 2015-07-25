@@ -200,10 +200,12 @@ public class KLists {
         
         Node merged = merge(lists);
         
+        StringBuilder sb = new StringBuilder();
         while (merged != null) {
-            System.out.println(merged.value);
+            sb.append(merged.value + "\n");
             merged = merged.next;
         }
+        System.out.println(sb.toString().trim());
         
         scanner.close();
     }
