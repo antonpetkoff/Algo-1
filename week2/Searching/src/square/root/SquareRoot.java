@@ -29,6 +29,15 @@ public class SquareRoot {
         double input = (double) scanner.nextInt();
         System.out.printf("%.5f", sqrt(input));
         scanner.close();
+        
+//        Scanner scanner = new Scanner(System.in);
+//        double input = (double) scanner.nextInt();
+//        NumberFormat df = DecimalFormat.getInstance();
+//        df.setRoundingMode(RoundingMode.UP);
+//        df.setMaximumFractionDigits(5);
+//        System.out.println(df.format(sqrt(input)));
+//        
+//        scanner.close();
     }
     
 }
