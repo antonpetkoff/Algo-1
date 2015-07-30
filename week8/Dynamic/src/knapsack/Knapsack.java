@@ -8,8 +8,11 @@ public class Knapsack {
         final int N = values.length;
         int[][] price = new int[N + 1][capacity + 1];
         
-        for (int i = 0; i < values.length; ++i) {
+        for (int i = 0; i < N + 1; ++i) {
             price[i][0] = 0;
+        }
+
+        for (int i = 0; i < capacity + 1; ++i) {
             price[0][i] = 0;
         }
         
