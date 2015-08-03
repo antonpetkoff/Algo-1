@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class SquareRoot {
     
-    public static final double PRECISION = 0.000001;
+    public static final double PRECISION = 0.00000001;
     public static final int ITER_BOUND = 100;
     
     public static double sqrt(double n) {
@@ -29,15 +29,6 @@ public class SquareRoot {
         double input = (double) scanner.nextInt();
         System.out.printf("%.5f", sqrt(input));
         scanner.close();
-        
-//        Scanner scanner = new Scanner(System.in);
-//        double input = (double) scanner.nextInt();
-//        NumberFormat df = DecimalFormat.getInstance();
-//        df.setRoundingMode(RoundingMode.UP);
-//        df.setMaximumFractionDigits(5);
-//        System.out.println(df.format(sqrt(input)));
-//        
-//        scanner.close();
     }
     
 }
