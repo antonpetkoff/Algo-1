@@ -15,7 +15,7 @@ public class BinaryIndexedTree {
     public BinaryIndexedTree(int initialCapacity, int[] values) {
         this.initialCapacity = initialCapacity;
         int size = (int) Math.pow(2, Math.ceil(Math.log(initialCapacity) / Math.log(2)));
-        tree = new int[2 * size]; // size = 2N, where N = 2^K
+        tree = new int[2 * size]; // size = 2N, where N = 2^K for K in the Naturals
 
         initTree(values);
     }

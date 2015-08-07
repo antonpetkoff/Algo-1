@@ -1,5 +1,7 @@
 package rmq;
 
+import java.util.Scanner;
+
 public class RMQ {
 
     int[] tree; // [1...N-1 | N...2N-1]
@@ -21,7 +23,6 @@ public class RMQ {
         for (i = 0; i < values.length; ++i) {
             tree[tree.length / 2 + i] = values[i];
         }
-        System.out.println("i stops at: " + i);
 
         for (int j = i; j < tree.length / 2; ++j) {
             tree[tree.length / 2 + j] = Integer.MAX_VALUE;
@@ -72,20 +73,52 @@ public class RMQ {
         return lMin;
     }
     
-    public void printState() {
-        for (int i = 0; i < tree.length; ++i) {
-            System.out.print(tree[i] + " ");
+    public void set(int pos, int value) {
+        int pointer = tree.length / 2 + pos;
+        tree[pointer] = value;
+        pointer = parent(pointer);
+
+        while (pointer != 0) {
+            tree[pointer] = Math.min(tree[left(pointer)], tree[right(pointer)]);
+            pointer = parent(pointer);
         }
     }
     
-    public static void main(String[] args) {
-        //int[] values = {19, 11, 15, 4, 7, 13, 11};
-        int[] values = {19, 11, 15, 4, 7, 13, 11, 2, 3, 5, 12, 7, 23, 17, 4, 6};
-        RMQ rmq = new RMQ(values);
-        rmq.printState();
+    public void printState() {
+        for (int i = 0; i < tree.length; ++i) {
+        	if (i % (tree.length / 2) == 0) {
+        		System.out.print("| ");
+        	}
+            System.out.print(tree[i] + " ");
+        }
         System.out.println();
+    }
+    
+    public static void main(String[] args) {
+    	Scanner scanner = new Scanner(System.in);
+        int N = scanner.nextInt(), K = scanner.nextInt();
+
+        int[] values = new int[N];
+        for (int i = 0; i < values.length; i++) {
+			values[i] = scanner.nextInt();
+		}
+        RMQ rmq = new RMQ(values);
+        System.out.print("Initial state: ");
+        rmq.printState();
         
-        System.out.println(rmq.min(5, 10));
+        String[] command = null;
+        for (int i = 0; i < K; i++) {
+			command = scanner.nextLine().split("\\s+");
+			if (command[0].equals("min")) {
+				System.out.println(rmq.min(Integer.parseInt(command[1]), Integer.parseInt(command[2])));
+			} else if (command[0].equals("set")) {
+				rmq.set(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
+				System.out.print("State after set " + Integer.parseInt(command[1]) + " " + Integer.parseInt(command[2]) + ": ");
+				rmq.printState();
+			}
+		}
+    	
+        scanner.close();
     }
     
 }
