@@ -1,10 +1,56 @@
 package rmq;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class RMQ {
+	
+	public static class MyScanner {
+		BufferedReader br;
+		StringTokenizer st;
 
-    int[] tree; // [1...N-1 | N...2N-1]
+		public MyScanner() {
+			br = new BufferedReader(new InputStreamReader(System.in));
+		}
+
+		String next() {
+			while (st == null || !st.hasMoreElements()) {
+				try {
+					st = new StringTokenizer(br.readLine());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return st.nextToken();
+		}
+
+		int nextInt() {
+			return Integer.parseInt(next());
+		}
+
+		long nextLong() {
+			return Long.parseLong(next());
+		}
+
+		double nextDouble() {
+			return Double.parseDouble(next());
+		}
+
+		String nextLine() {
+			String str = "";
+			try {
+				str = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return str;
+		}
+
+	}
+
+    public int[] tree; // [1...N-1 | N...2N-1]
 
     /**
      * @param initialSize
@@ -48,20 +94,27 @@ public class RMQ {
     public int min(int l, int r) {
         l += tree.length / 2;
         r += tree.length / 2;
+        
         int lMin = tree[l], rMin = tree[r], temp = 0;
         
         while (l < r) {
+            if (r - l == 1) {
+            	break;
+            }
+        	
+            // move left pointer one level up and to the right
             if (l % 2 == 0) {   // left pointer is left child
                 l = parent(l);
                 lMin = Math.min(lMin, tree[l]);
             } else {            // left pointer is right child
-                temp = tree[l];
+                temp = Math.min(lMin, tree[l]);
                 l = parent(l + 1);
                 lMin = Math.min(temp, tree[l]);
             }
             
+            // move right pointer one level up and to the left
             if (r % 2 == 0) {   // right pointer is left child
-                temp = tree[r];
+            	temp = Math.min(rMin, tree[r]);
                 r = parent(r - 1);
                 rMin = Math.min(temp, tree[r]);
             } else {            // right pointer is right child
@@ -70,7 +123,7 @@ public class RMQ {
             }
         }
         
-        return lMin;
+        return Math.min(lMin, rMin);
     }
     
     public void set(int pos, int value) {
@@ -89,13 +142,19 @@ public class RMQ {
         	if (i % (tree.length / 2) == 0) {
         		System.out.print("| ");
         	}
-            System.out.print(tree[i] + " ");
+        	
+        	if (tree[i] == Integer.MAX_VALUE) {
+        		System.out.print("INF ");
+        	}
+        	else {
+        		System.out.print(tree[i] + " ");
+        	}
         }
         System.out.println();
     }
     
     public static void main(String[] args) {
-    	Scanner scanner = new Scanner(System.in);
+    	MyScanner scanner = new MyScanner();
         int N = scanner.nextInt(), K = scanner.nextInt();
 
         int[] values = new int[N];
@@ -103,9 +162,7 @@ public class RMQ {
 			values[i] = scanner.nextInt();
 		}
         RMQ rmq = new RMQ(values);
-        System.out.print("Initial state: ");
-        rmq.printState();
-        
+
         String[] command = null;
         for (int i = 0; i < K; i++) {
 			command = scanner.nextLine().split("\\s+");
@@ -113,12 +170,8 @@ public class RMQ {
 				System.out.println(rmq.min(Integer.parseInt(command[1]), Integer.parseInt(command[2])));
 			} else if (command[0].equals("set")) {
 				rmq.set(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
-				System.out.print("State after set " + Integer.parseInt(command[1]) + " " + Integer.parseInt(command[2]) + ": ");
-				rmq.printState();
 			}
 		}
-    	
-        scanner.close();
     }
     
 }
