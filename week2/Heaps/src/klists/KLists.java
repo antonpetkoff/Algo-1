@@ -202,7 +202,7 @@ public class KLists {
         
         StringBuilder sb = new StringBuilder();
         while (merged != null) {
-            sb.append(merged.value + "\n");
+            sb.append(merged.value + " ");
             merged = merged.next;
         }
         System.out.println(sb.toString().trim());

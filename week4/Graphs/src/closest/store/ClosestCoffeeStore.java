@@ -1,47 +1,36 @@
 package closest.store;
 
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Scanner;
 
 public class ClosestCoffeeStore {
 
-    public static final int SIZE = 6;
-
-    public static final boolean[][] graph = { { false, true, false, true, false, false },
-            { true, false, true, false, false, false }, { false, true, false, false, true, false },
-            { true, false, false, false, false, false }, { false, false, true, false, false, true },
-            { false, false, false, false, true, false }, };
-
-    public static final boolean[] isCoffeeStore = { false, false, true, false, false, true };
-
-    // Finds the closest coffee store to a point.
-    public static int closestCoffeeStore(boolean[][] graph, boolean[] isCoffeeStore, int startingPoint) {
-        Queue<Integer> queue = new LinkedList<Integer>();
-        boolean[] visited = new boolean[SIZE];
+    public static int closestCoffeeStore(int[][] graph, int[] isCoffeeStore, int startingPoint) {
+    	LinkedList<Integer> currentLevel = new LinkedList<Integer>(),
+    			nextLevel = new LinkedList<Integer>();
+        boolean[] visited = new boolean[graph.length];
+        int level = 1;
                 
-//        int[] previous = new int[SIZE];     // previous[i] = parent(i);
-//        for (int i = 0; i < previous.length; ++i) {
-//            previous[i] = -1;
-//        }
-//        int[] dist = new int[SIZE];         // dist[i] = dist(i, startingPoint);
-//        dist[startingPoint] = 0;
-        
-        queue.add(startingPoint);
+        currentLevel.addLast(startingPoint);
 
-        while (!queue.isEmpty()) {
-            int vertex = queue.remove();
+        while (!currentLevel.isEmpty()) {
+            int vertex = currentLevel.removeFirst();
             visited[vertex] = true;
 
-            for (int i = 0; i < SIZE; ++i) {
-                if (graph[vertex][i] == true && visited[i] == false) {
-                    if (isCoffeeStore[i]) {                        
-                        return i;
+            for (int i = 0; i < graph.length; ++i) {
+                if (graph[vertex][i] == 1 && !visited[i]) {
+                    if (isCoffeeStore[i] == 1) {                        
+                        return level;
                     }
-                    queue.add(i);
-                    
-                    //dist[i] = dist[vertex] + 1;
-                    //previous[i] = vertex;
+                    nextLevel.add(i);
                 }
+            }
+            
+            if (currentLevel.isEmpty()) {
+            	LinkedList<Integer> tempQueue = currentLevel;
+            	currentLevel = nextLevel;
+            	nextLevel = tempQueue;
+            	++level;
             }
         }
         
@@ -49,7 +38,27 @@ public class ClosestCoffeeStore {
     }
 
     public static void main(String[] args) {
-        int result = closestCoffeeStore(graph, isCoffeeStore, 0);
-        System.out.println(result);
+    	Scanner scanner = new Scanner(System.in);
+    	int N = scanner.nextInt();
+    	
+    	int[][] graph = new int[N][N];
+    	
+    	for (int i = 0; i < graph.length; i++) {
+			for (int j = 0; j < graph.length; j++) {
+				graph[i][j] = scanner.nextInt();
+			}
+		}
+    	
+    	int startingPoint = scanner.nextInt();
+    	
+    	int[] isCoffeeStore = new int[N];
+    	for (int i = 0; i < graph.length; ++i) {
+    		isCoffeeStore[i] = scanner.nextInt();
+    	}
+    	
+    	System.out.println(closestCoffeeStore(graph, isCoffeeStore, startingPoint));
+    	
+    	scanner.close();
     }
+    
 }
