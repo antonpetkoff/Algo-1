@@ -10,7 +10,7 @@ public class Castaway {
         Scanner scanner = new Scanner(System.in);
         
         int rows = scanner.nextInt(), cols = scanner.nextInt();
-        int Sx = scanner.nextInt(), Sy = scanner.nextInt(), Fx = scanner.nextInt(), Fy = scanner.nextInt();
+//        int Sx = scanner.nextInt(), Sy = scanner.nextInt(), Fx = scanner.nextInt(), Fy = scanner.nextInt();
         matrix = new char[rows][cols];
         
         String temp = null;
