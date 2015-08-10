@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class TestBirthdayRanges {
-
+	
     @Test
     public void testBirthdayRanges() {
         int values[] = {5, 10, 6, 7, 3, 4, 5, 11, 21, 300, 15};
@@ -24,6 +24,9 @@ public class TestBirthdayRanges {
         
         br.add(5, 1);
         assertEquals(15, br.count(5, 25));
+        
+        br.remove(5, 10);
+        assertEquals(6, br.count(1, 10));
     }
     
 }

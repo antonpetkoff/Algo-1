@@ -23,9 +23,9 @@ public class BinaryIndexedTree {
     private void initTree(int[] values) {
         int i = 0;
 
-        for (i = tree.length / 2; i < tree.length; ++i) {
-            tree[i] = 0;
-        }
+//        for (i = tree.length / 2; i < tree.length; ++i) {
+//            tree[i] = 0;
+//        }
 
         for (i = 0; i < values.length; ++i) {
             ++tree[tree.length / 2 + values[i]]; // N + i
@@ -89,4 +89,16 @@ public class BinaryIndexedTree {
         }
     }
 
+    @Override
+    public String toString() {
+    	StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tree.length; ++i) {
+        	if (i % (tree.length / 2) == 0) {
+        		sb.append("| ");
+        	}
+    		sb.append(tree[i] + " ");
+        }
+        return sb.toString();
+    }
+    
 }
