@@ -38,6 +38,7 @@ public class BirthdayRanges {
         
         BirthdayRanges br = new BirthdayRanges(values);
         
+        scanner.nextLine();
         String command = null;
         for (int i = 0; i < commandsCount; ++i) {
             command = scanner.next();

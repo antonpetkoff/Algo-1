@@ -23,7 +23,7 @@ public class TestBirthdayRanges {
         assertEquals(8, br.count(10, 20));
         
         br.add(5, 1);
-        assertEquals(13, br.count(5, 25));      // 15
+        assertEquals(15, br.count(5, 25));
     }
     
 }
