@@ -1,33 +1,36 @@
 package closest.store;
 
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class ClosestCoffeeStore {
 
-    // Finds the closest coffee store to a point.
     public static int closestCoffeeStore(int[][] graph, int[] isCoffeeStore, int startingPoint) {
-        Queue<Integer> queue = new LinkedList<Integer>();
+    	LinkedList<Integer> currentLevel = new LinkedList<Integer>(),
+    			nextLevel = new LinkedList<Integer>();
         boolean[] visited = new boolean[graph.length];
+        int level = 1;
                 
-        int[] dist = new int[graph.length];         // dist[i] = dist(i, startingPoint);
-        dist[startingPoint] = 0;
-        
-        queue.add(startingPoint);
+        currentLevel.addLast(startingPoint);
 
-        while (!queue.isEmpty()) {
-            int vertex = queue.remove();
+        while (!currentLevel.isEmpty()) {
+            int vertex = currentLevel.removeFirst();
             visited[vertex] = true;
 
             for (int i = 0; i < graph.length; ++i) {
                 if (graph[vertex][i] == 1 && !visited[i]) {
-                	dist[i] = dist[vertex] + 1;
                     if (isCoffeeStore[i] == 1) {                        
-                        return dist[i];
+                        return level;
                     }
-                    queue.add(i);
+                    nextLevel.add(i);
                 }
+            }
+            
+            if (currentLevel.isEmpty()) {
+            	LinkedList<Integer> tempQueue = currentLevel;
+            	currentLevel = nextLevel;
+            	nextLevel = tempQueue;
+            	++level;
             }
         }
         
