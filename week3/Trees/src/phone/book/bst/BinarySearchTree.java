@@ -11,6 +11,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
         public Node<E> left;
         public Node<E> right;
         
+        public Node() {
+        	this(null, null, null);
+        }
+        
         public Node(E item, Node<E> left, Node<E> right) {
             this.item = item;
             this.left = left;
@@ -18,8 +22,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
     
-    private Node<T> root;
-    private int size;
+    public Node<T> root;
+    public int size;
     
     public BinarySearchTree() {
         this.root = null;

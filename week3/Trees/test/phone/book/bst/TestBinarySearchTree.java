@@ -2,6 +2,9 @@ package phone.book.bst;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
@@ -9,35 +12,121 @@ import org.junit.Test;
 import phone.book.bst.BinarySearchTree.Node;
 
 public class TestBinarySearchTree {
+	
+	public static class BstPrinter {
+
+	    public static <T extends Comparable<?>> void printNode(Node<T> root) {
+	        int maxLevel = BstPrinter.maxLevel(root);
+
+	        printNodeInternal(Collections.singletonList(root), 1, maxLevel);
+	    }
+
+	    private static <T extends Comparable<?>> void printNodeInternal(List<Node<T>> nodes, int level, int maxLevel) {
+	        if (nodes.isEmpty() || BstPrinter.isAllElementsNull(nodes))
+	            return;
+
+	        int floor = maxLevel - level;
+	        int endgeLines = (int) Math.pow(2, (Math.max(floor - 1, 0)));
+	        int firstSpaces = (int) Math.pow(2, (floor)) - 1;
+	        int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
+
+	        BstPrinter.printWhitespaces(firstSpaces);
+
+	        List<Node<T>> newNodes = new ArrayList<Node<T>>();
+	        for (Node<T> node : nodes) {
+	            if (node != null) {
+	                System.out.print(node.item);
+	                newNodes.add(node.left);
+	                newNodes.add(node.right);
+	            } else {
+	                newNodes.add(null);
+	                newNodes.add(null);
+	                System.out.print(" ");
+	            }
+
+	            BstPrinter.printWhitespaces(betweenSpaces);
+	        }
+	        System.out.println("");
+
+	        for (int i = 1; i <= endgeLines; i++) {
+	            for (int j = 0; j < nodes.size(); j++) {
+	                BstPrinter.printWhitespaces(firstSpaces - i);
+	                if (nodes.get(j) == null) {
+	                    BstPrinter.printWhitespaces(endgeLines + endgeLines + i + 1);
+	                    continue;
+	                }
+
+	                if (nodes.get(j).left != null)
+	                    System.out.print("/");
+	                else
+	                    BstPrinter.printWhitespaces(1);
+
+	                BstPrinter.printWhitespaces(i + i - 1);
+
+	                if (nodes.get(j).right != null)
+	                    System.out.print("\\");
+	                else
+	                    BstPrinter.printWhitespaces(1);
+
+	                BstPrinter.printWhitespaces(endgeLines + endgeLines - i);
+	            }
+
+	            System.out.println("");
+	        }
+
+	        printNodeInternal(newNodes, level + 1, maxLevel);
+	    }
+
+	    private static void printWhitespaces(int count) {
+	        for (int i = 0; i < count; i++)
+	            System.out.print(" ");
+	    }
+
+	    private static <T extends Comparable<?>> int maxLevel(Node<T> node) {
+	        if (node == null)
+	            return 0;
+
+	        return Math.max(BstPrinter.maxLevel(node.left), BstPrinter.maxLevel(node.right)) + 1;
+	    }
+
+	    private static <T> boolean isAllElementsNull(List<T> list) {
+	        for (Object object : list) {
+	            if (object != null)
+	                return false;
+	        }
+
+	        return true;
+	    }
+
+	}
+
+	public static Random rand = new Random();
+	
+	public static int randomRange(int lo, int hi) {
+		return lo + (int) (rand.nextDouble() * (hi - lo));
+	}
 
 	public static class BstGenerator {
-		public static Random rand = new Random();
-
-		public static int randomRange(int lo, int hi) {
-			return lo + (int) (rand.nextDouble() * (hi - lo));
-		}
+		public static List<Integer> values = new ArrayList<>();
 
 		public static Node<Integer> generateTree(int lo, int hi) {
-			Node<Integer> root = new Node<Integer>(randomRange(lo, hi), new Node<Integer>(null, null, null),
-					new Node<Integer>(null, null, null));
-			generateChildren(root.left, lo, root.item - 1);
-			generateChildren(root.right, root.item + 1, hi);
+			Node<Integer> root = new Node<>();
+			generateChildren(root, lo, hi);
 			return root;
 		}
 
 		public static void generateChildren(Node<Integer> root, int lo, int hi) {
-			if (hi - lo < 1) {
-				return;
-			}
-			root.item = randomRange(lo, hi);
+			int rand = randomRange(lo, hi);
+			values.add(rand);
+			root.item = rand;
 
 			if ((root.item - 1) - lo > 0) {
-				root.left = new Node<Integer>(0, null, null);
+				root.left = new Node<Integer>();
 				generateChildren(root.left, lo, root.item - 1);
 			}
 
 			if (hi - (root.item + 1) > 0) {
-				root.right = new Node<Integer>(0, null, null);
+				root.right = new Node<Integer>();
 				generateChildren(root.right, root.item + 1, hi);
 			}
 		}
@@ -61,14 +150,42 @@ public class TestBinarySearchTree {
 		}
 	}
 
-	public static final int LO = -100000;
-	public static final int HI = 100000;
-	public static final int TESTS = 1000;
-	
 	@Test
 	public void testGenerator() {
-		for (int i = 0; i < TESTS; i++) {
-			assertTrue(BstChecker.isBST(BstGenerator.generateTree(LO, HI)));
+		for (int i = 0; i < 1000; i++) {
+			assertTrue(BstChecker.isBST(BstGenerator.generateTree(-1000, 1000)));
+		}
+	}
+	
+	@Test
+	public void testInsertAndSearch() {
+		BinarySearchTree<Integer> bst = new BinarySearchTree<>();
+		int item = 0;
+		
+		for (int i = 0; i < 1000; ++i) {
+			item = rand.nextInt();
+			bst.insert(item);
+			assertTrue(BstChecker.isBST(bst.root));
+			assertEquals(Integer.valueOf(item), bst.search(item));
+		}
+	}
+	
+	@Test
+	public void testRemoveAndSearch() {
+		BinarySearchTree<Integer> bst = new BinarySearchTree<>();
+		bst.root = BstGenerator.generateTree(0, 10);
+		List<Integer> values = BstGenerator.values;
+		BstPrinter.printNode(bst.root);
+		
+		int index = 0;
+		for (int i = 0; i < 1000; ++i) {
+			index = randomRange(0, values.size() - 1);
+			assertEquals(values.get(index), bst.search(values.get(index)));
+			System.out.println(values.get(index));
+			bst.remove(values.get(index));
+			values.remove(index);
+			assertTrue(BstChecker.isBST(bst.root));
+			assertEquals(null, bst.search(index));
 		}
 	}
 
