@@ -11,6 +11,10 @@ public class PhoneBook {
             public Node<E> left;
             public Node<E> right;
             
+            public Node() {
+                this(null, null, null);
+            }
+            
             public Node(E item, Node<E> left, Node<E> right) {
                 this.item = item;
                 this.left = left;
@@ -18,8 +22,8 @@ public class PhoneBook {
             }
         }
         
-        private Node<T> root;
-        private int size;
+        public Node<T> root;
+        public int size;
         
         public BinarySearchTree() {
             this.root = null;
@@ -105,7 +109,7 @@ public class PhoneBook {
         private Node<T> leftMostChild(Node<T> root) {
             Node<T> current = root;
             
-            while (current != null) {
+            while (current.left != null) {
                 current = current.left;
             }
             
@@ -142,23 +146,17 @@ public class PhoneBook {
             return parent;
         }
         
-        private void removeFromParent(Node<T> node) {
-            Node<T> parent = getParent(node);
-            
-            if (parent.left == node) {
-                parent.left = null;
-            } else if (parent.right == node) {
-                parent.right = null;
-            }
-        }
-        
         private void replaceInParent(Node<T> unneeded, Node<T> replacement) {
             Node<T> parent = getParent(unneeded);
             
-            if (parent.left == unneeded) {
-                parent.left = replacement;
-            } else if (parent.right == unneeded) {
-                parent.right = replacement;
+            if (parent == null) {
+                root = replacement;
+            } else {
+                if (parent.left == unneeded) {
+                    parent.left = replacement;
+                } else if (parent.right == unneeded) {
+                    parent.right = replacement;
+                }
             }
         }
         
@@ -168,13 +166,18 @@ public class PhoneBook {
             }
             
             if (hasNoChildren(node)) {
-                removeFromParent(node);
+                replaceInParent(node, null);
             } else if (hasOneChild(node)) {
                 replaceInParent(node, onlyChild(node));
             } else {
                 Node<T> replacement = leftMostChild(node.right);
-                node.item = replacement.item;
-                removeNode(replacement);
+                if (replacement == null) {
+                    node.right.left = node.left;
+                    replaceInParent(node, node.right);
+                } else {
+                    removeNode(replacement);
+                    node.item = replacement.item;
+                }
             }
         }
         
@@ -183,8 +186,9 @@ public class PhoneBook {
             removeNode(current);
             --size;
         }
+        
     }
-    
+
     public static final class Contact implements Comparable<Contact> {
         public final int number;
         public final String name;

@@ -108,12 +108,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
     
     private Node<T> leftMostChild(Node<T> root) {
         Node<T> current = root;
-//        System.out.println("leftMostChild(): root is " + current.item + ", left: " + (current.left.item == null ? null : current.left.item));
         
-        while (current != null) {
+        while (current.left != null) {
             current = current.left;
         }
-        System.out.println("Leftmost child of " + root.item + " is " + (current == null ? null : current.item));
         
         return current;
     }
@@ -148,20 +146,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return parent;
     }
     
-    private void removeFromParent(Node<T> node) {
-        Node<T> parent = getParent(node);
-        
-        if (parent == null) {
-        	root = null;
-        } else {
-        	if (parent.left == node) {
-        		parent.left = null;
-        	} else if (parent.right == node) {
-        		parent.right = null;
-        	}
-        }
-    }
-    
     private void replaceInParent(Node<T> unneeded, Node<T> replacement) {
         Node<T> parent = getParent(unneeded);
         
@@ -182,7 +166,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
         
         if (hasNoChildren(node)) {
-            removeFromParent(node);
+            replaceInParent(node, null);
         } else if (hasOneChild(node)) {
             replaceInParent(node, onlyChild(node));
         } else {
@@ -191,8 +175,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
             	node.right.left = node.left;
             	replaceInParent(node, node.right);
             } else {
-            	node.item = replacement.item;
             	removeNode(replacement);
+            	node.item = replacement.item;
             }
         }
     }
@@ -201,19 +185,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
         Node<T> current = findNode(elem);
         removeNode(current);
         --size;
-    }
-    
-    public static void main(String[] args) {
-        BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
-        bst.insert(5);
-        bst.insert(2);
-        bst.insert(7);
-        bst.insert(3);
-        bst.traverse();
-        System.out.println();
-        bst.remove(2);
-        bst.traverse();
-        System.out.println(bst.search(4));
     }
     
 }

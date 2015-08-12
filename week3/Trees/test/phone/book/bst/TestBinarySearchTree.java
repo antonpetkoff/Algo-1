@@ -175,15 +175,14 @@ public class TestBinarySearchTree {
 		BinarySearchTree<Integer> bst = new BinarySearchTree<>();
 		bst.root = BstGenerator.generateTree(lo, hi);
 		List<Integer> values = BstGenerator.values;
-		BstPrinter.printNode(bst.root);
+//		BstPrinter.printNode(bst.root);
 		
 		int index = 0;
 		while (bst.root != null) {
 			index = randomRange(0, values.size() - 1);
 			assertEquals(values.get(index), bst.search(values.get(index)));
-			System.out.println("Removing " + values.get(index) + " from " + values);
 			bst.remove(values.get(index));
-			BstPrinter.printNode(bst.root);
+//			BstPrinter.printNode(bst.root);
 			assertTrue(BstChecker.isBST(bst.root));
 			assertEquals(null, bst.search(values.get(index)));
 			values.remove(index);
@@ -192,8 +191,8 @@ public class TestBinarySearchTree {
 	
 	@Test
 	public void testRemoveAndSearchBulk() {
-		for (int i = 0; i < 10; i++) {
-			testRemoveAndSearch(0, 10);
+		for (int i = 0; i < 1000; i++) {
+			testRemoveAndSearch(-1000, 1000);
 		}
 	}
 
