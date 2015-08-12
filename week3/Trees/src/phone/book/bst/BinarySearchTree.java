@@ -11,6 +11,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
         public Node<E> left;
         public Node<E> right;
         
+        public Node() {
+        	this(null, null, null);
+        }
+        
         public Node(E item, Node<E> left, Node<E> right) {
             this.item = item;
             this.left = left;
@@ -18,8 +22,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
     
-    private Node<T> root;
-    private int size;
+    public Node<T> root;
+    public int size;
     
     public BinarySearchTree() {
         this.root = null;
@@ -104,10 +108,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
     
     private Node<T> leftMostChild(Node<T> root) {
         Node<T> current = root;
+//        System.out.println("leftMostChild(): root is " + current.item + ", left: " + (current.left.item == null ? null : current.left.item));
         
         while (current != null) {
             current = current.left;
         }
+        System.out.println("Leftmost child of " + root.item + " is " + (current == null ? null : current.item));
         
         return current;
     }
@@ -145,20 +151,28 @@ public class BinarySearchTree<T extends Comparable<T>> {
     private void removeFromParent(Node<T> node) {
         Node<T> parent = getParent(node);
         
-        if (parent.left == node) {
-            parent.left = null;
-        } else if (parent.right == node) {
-            parent.right = null;
+        if (parent == null) {
+        	root = null;
+        } else {
+        	if (parent.left == node) {
+        		parent.left = null;
+        	} else if (parent.right == node) {
+        		parent.right = null;
+        	}
         }
     }
     
     private void replaceInParent(Node<T> unneeded, Node<T> replacement) {
         Node<T> parent = getParent(unneeded);
         
-        if (parent.left == unneeded) {
-            parent.left = replacement;
-        } else if (parent.right == unneeded) {
-            parent.right = replacement;
+        if (parent == null) {
+        	root = replacement;
+        } else {
+        	if (parent.left == unneeded) {
+        		parent.left = replacement;
+        	} else if (parent.right == unneeded) {
+        		parent.right = replacement;
+        	}
         }
     }
     
@@ -173,8 +187,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
             replaceInParent(node, onlyChild(node));
         } else {
             Node<T> replacement = leftMostChild(node.right);
-            node.item = replacement.item;
-            removeNode(replacement);
+            if (replacement == null) {
+            	node.right.left = node.left;
+            	replaceInParent(node, node.right);
+            } else {
+            	node.item = replacement.item;
+            	removeNode(replacement);
+            }
         }
     }
     
