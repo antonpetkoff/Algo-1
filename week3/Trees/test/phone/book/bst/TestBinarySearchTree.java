@@ -107,9 +107,10 @@ public class TestBinarySearchTree {
 	}
 
 	public static class BstGenerator {
-		public static List<Integer> values = new ArrayList<>();
+		public static List<Integer> values;
 
 		public static Node<Integer> generateTree(int lo, int hi) {
+			values = new ArrayList<>();
 			Node<Integer> root = new Node<>();
 			generateChildren(root, lo, hi);
 			return root;
@@ -170,22 +171,29 @@ public class TestBinarySearchTree {
 		}
 	}
 	
-	@Test
-	public void testRemoveAndSearch() {
+	public static void testRemoveAndSearch(int lo, int hi) {
 		BinarySearchTree<Integer> bst = new BinarySearchTree<>();
-		bst.root = BstGenerator.generateTree(0, 10);
+		bst.root = BstGenerator.generateTree(lo, hi);
 		List<Integer> values = BstGenerator.values;
 		BstPrinter.printNode(bst.root);
 		
 		int index = 0;
-		for (int i = 0; i < 1000; ++i) {
+		while (bst.root != null) {
 			index = randomRange(0, values.size() - 1);
 			assertEquals(values.get(index), bst.search(values.get(index)));
-			System.out.println(values.get(index));
+			System.out.println("Removing " + values.get(index) + " from " + values);
 			bst.remove(values.get(index));
-			values.remove(index);
+			BstPrinter.printNode(bst.root);
 			assertTrue(BstChecker.isBST(bst.root));
-			assertEquals(null, bst.search(index));
+			assertEquals(null, bst.search(values.get(index)));
+			values.remove(index);
+		}
+	}
+	
+	@Test
+	public void testRemoveAndSearchBulk() {
+		for (int i = 0; i < 10; i++) {
+			testRemoveAndSearch(0, 10);
 		}
 	}
 
