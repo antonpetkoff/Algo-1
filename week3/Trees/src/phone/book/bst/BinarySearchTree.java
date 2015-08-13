@@ -1,9 +1,5 @@
 package phone.book.bst;
 
-/**
- *  left sub-tree has elements <= root
- *  right sub-tree has element > root
- */
 public class BinarySearchTree<T extends Comparable<T>> {
 
     public static class Node<E> {
@@ -24,6 +20,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
     
     public Node<T> root;
     public int size;
+    private StringBuilder sorted;
     
     public BinarySearchTree() {
         this.root = null;
@@ -48,17 +45,16 @@ public class BinarySearchTree<T extends Comparable<T>> {
             } else {
                 insertNode(root.left, newNode);
             }
-        } else if (newNode.item.compareTo(root.item) >= 0) {	// >= supports equal elements
+        } else if (newNode.item.compareTo(root.item) > 0) {
             if (root.right == null) {
                 root.right = newNode;
                 ++size;
             } else {
                 insertNode(root.right, newNode);
             }
+        } else {
+            root.item = newNode.item;   // rewrite equal items
         }
-//        } else {
-//            root.item = newNode.item;   // rewrite equal items
-//        }
     }
     
     public void insert(T elem) {
@@ -78,12 +74,14 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
         
         traverseNodes(root.left);
-        System.out.println(root.item);
+        sorted.append(root.item + "\n");
         traverseNodes(root.right);
     }
     
-    public void traverse() {
-        traverseNodes(root);
+    public String traverse() {
+        sorted = new StringBuilder();
+    	traverseNodes(root);
+    	return sorted.toString().trim();
     }
     
     private Node<T> findNode(T elem) {
