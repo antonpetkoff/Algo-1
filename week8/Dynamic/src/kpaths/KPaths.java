@@ -52,7 +52,30 @@ public class KPaths {
         if (!map.containsKey(key)) {
             map.put(key, new LinkedList<Integer>());
         }
+        if (!map.containsKey(value)) {
+            map.put(value, new LinkedList<Integer>());
+        }
+        
         map.get(key).add(value);
+    }
+    
+    public static int kPaths(Map<Integer, List<Integer>> parents, List<Integer> sorted, int start, int end, int length) {
+        int[] dyn = new int[sorted.size()];
+        dyn[start] = 1;
+        
+        end = sorted.indexOf(end);
+        for (int i = sorted.indexOf(start) + 1; i <= end; ++i) {
+//            dyn[i] = dyn[i - 1] + parents.get(sorted.get(i)).size();
+            for (Integer parent : parents.get(sorted.get(i))) {
+                dyn[i] += dyn[parent];
+            }
+        }
+        
+        for (int i = 0; i < dyn.length; i++) {
+            System.out.print(dyn[i] + " ");
+        }
+        
+        return dyn[end];
     }
     
     public static void main(String[] args) {
@@ -73,6 +96,7 @@ public class KPaths {
         int start = scanner.nextInt(), end = scanner.nextInt(), length = scanner.nextInt();
         LinkedList<Integer> result = topologicalSort(children);
         System.out.println(result);
+        System.out.println(kPaths(parents, result, start, end, length));
         
         scanner.close();
     }
