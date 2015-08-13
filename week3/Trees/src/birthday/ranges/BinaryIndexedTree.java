@@ -23,10 +23,6 @@ public class BinaryIndexedTree {
     private void initTree(int[] values) {
         int i = 0;
 
-//        for (i = tree.length / 2; i < tree.length; ++i) {
-//            tree[i] = 0;
-//        }
-
         for (i = 0; i < values.length; ++i) {
             ++tree[tree.length / 2 + values[i]]; // N + i
         }
@@ -34,6 +30,10 @@ public class BinaryIndexedTree {
         for (i = tree.length / 2 - 1; i > 0; --i) {
             tree[i] = tree[left(i)] + tree[right(i)];
         }
+    }
+    
+    public int get(int index) {
+    	return tree[tree.length / 2 + index];
     }
 
     private int left(int i) {
@@ -76,10 +76,12 @@ public class BinaryIndexedTree {
         boundsCheck(pos);
 
         int pointer = tree.length / 2 + pos;
+        tree[pointer] = tree[pointer] + value < 0 ? 0 : tree[pointer] + value;
+        pointer = parent(pointer);
 
         while (pointer != 0) { // pointer != root
-            tree[pointer] += value;
-            pointer = parent(pointer);
+        	tree[pointer] = tree[left(pointer)] + tree[right(pointer)];
+        	pointer = parent(pointer);
         }
     }
 

@@ -1,116 +1,131 @@
 package build.scripts;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.StringTokenizer;
 
 public class BuildScripts {
+	
+	public static class MyScanner {
+		BufferedReader br;
+		StringTokenizer st;
 
-    private static List<List<String>> adjacencyList;
-    private static Map<String, Integer> indexOf;
-    private static String[] vertices;
-    private static boolean[] visited;
-    private static String target;
-    //private static final String BUILD_ERROR = "BUILD ERROR";
-    
-    private static Stack<String> sorted;
-    
-    public static void init() {
-        Scanner scanner = new Scanner(System.in);
+		public MyScanner() {
+			br = new BufferedReader(new InputStreamReader(System.in));
+		}
+
+		String next() {
+			while (st == null || !st.hasMoreElements()) {
+				try {
+					st = new StringTokenizer(br.readLine());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return st.nextToken();
+		}
+
+		int nextInt() {
+			return Integer.parseInt(next());
+		}
+
+		long nextLong() {
+			return Long.parseLong(next());
+		}
+
+		double nextDouble() {
+			return Double.parseDouble(next());
+		}
+
+		String nextLine() {
+			String str = "";
+			try {
+				str = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return str;
+		}
+
+	}
+
+	public static final int WHITE = 0;
+	public static final int GREY = 1;
+	public static final int BLACK = 2;
+	public static final String BUILD_ERROR = "BUILD ERROR";
+	
+	public static LinkedList<String> sorted;
+	public static Map<String, Integer> visited;
+	
+	/**
+	 * Topological sort in reversed order.
+	 */
+	public static LinkedList<String> topologicalSort(Map<String, LinkedList<String>> graph, String start) {
+		sorted = new LinkedList<>();
+		visited = new HashMap<>();
+		for (String node : graph.keySet()) {
+			visited.put(node, WHITE);
+		}
+		
+		// the general case is (order doesn't matter) > for each unvisited node: visit(node)
+		if (!visit(start, graph)) {	// if the graph is a DAG
+			return new LinkedList<String>(Arrays.asList(BUILD_ERROR));
+		}
+		
+		return sorted;
+	}
+	
+	/**
+	 * @param 	node
+	 * @return	false if the graph is not a DAG, true if it is a DAG
+	 */
+	public static boolean visit(String node, Map<String, LinkedList<String>> graph) {
+		if (visited.get(node) == GREY) {
+			return false;	// not a DAG!
+		}
+		if (visited.get(node) == WHITE) {
+			visited.put(node, GREY);
+			for (String neighbour : graph.get(node)) {
+				if(!visit(neighbour, graph)) {	// if the graph is a DAG
+					return false;
+				}
+			}
+			visited.put(node, BLACK);
+			sorted.addLast(node);	// we are doing it in reverse order
+		}
+		return true;
+	}
+	
+	public static void main(String[] args) {
+        MyScanner scanner = new MyScanner();
         int vertexCount = scanner.nextInt();
         
-        adjacencyList = new ArrayList<List<String>>(vertexCount);
-        indexOf = new HashMap<String, Integer>(vertexCount);
-        vertices = new String[vertexCount];
-        visited = new boolean[vertexCount];
+        String[] vertices = new String[vertexCount];
+        Map<String, LinkedList<String>> graph = new HashMap<>();
         
         for (int i = 0; i < vertexCount; ++i) {
-            String temp = scanner.next();
-            adjacencyList.add(new ArrayList<String>());
-            indexOf.put(temp, i);
-            vertices[i] = temp;
-            visited[i] = false;
+            String vertex = scanner.next();
+            graph.put(vertex, new LinkedList<String>());
+            vertices[i] = vertex;
         }
         
-        target = scanner.next();
+        String target = scanner.next();
         
         for (int i = 0; i < vertexCount; ++i) {
             int N = scanner.nextInt();
             for(int j = 0; j < N; ++j) {
-                adjacencyList.get(i).add(scanner.next());
+                graph.get(vertices[i]).add(scanner.next());
             }
         }
         
-        System.out.println(target);
-        for (int i = 0; i < vertexCount; ++i) {
-            System.out.println(adjacencyList.get(i));
-        }
-        
-        System.out.println(indexOf);
-        
-        scanner.close();
-    }
-    
-    public static String topologicalSort(String target) {
-        sorted = new Stack<String>();
-        
-        visitDFS(target);
-        
-//        for (int i = 0; i < visited.length; ++i) {
-//            if (!visited[i]) {
-//                boolean hasCycle = visitDFS(vertices[i]);
-//                if (hasCycle) {
-//                    return BUILD_ERROR;
-//                }
-//            }
-//        }
-        
-        StringBuilder sb = new StringBuilder();
-        while (!sorted.isEmpty()) {
-            sb.append(sorted.pop() + " ");
-        }
-        return sb.toString().trim();
-    }
-    
-    public static boolean visitDFS(String vertex) {
-        Stack<String> stack = new Stack<String>();
-        boolean[] inPath = new boolean[vertices.length];
-        
-        stack.push(vertex);
-        
-        while (!stack.isEmpty()) {
-            String x = stack.pop();
-            sorted.push(x);
-            System.out.println("sorted.push: " + x);
-            inPath[indexOf.get(x)] = true;
-            
-            List<String> neighbours = adjacencyList.get(indexOf.get(x));
-            for (int i = 0; i < neighbours.size(); ++i) {
-                String neighbour = neighbours.get(i);
-                
-                // TODO fix cycles
-//                if (inPath[indexOf.get(neighbour)]) {
-//                    return true;    // cycle detected
-//                }
-                
-                if (!visited[indexOf.get(neighbour)]) {
-                    stack.push(neighbour);
-                    visited[indexOf.get(neighbour)] = true;
-                }
-            }
-            
-        }
-        
-        return false;
-    }
-    
-    public static void main(String[] args) {
-        init();
-        String sorted = topologicalSort(target);
-        System.out.println('\n' + sorted);
-    }
-    
+        String sorted = topologicalSort(graph, target).toString();
+        sorted = sorted.substring(1, sorted.length() - 1);
+        System.out.println(sorted.replaceAll(",\\s+", " ").trim());
+	}
+	
 }
