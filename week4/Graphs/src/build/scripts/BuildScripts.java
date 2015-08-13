@@ -62,7 +62,10 @@ public class BuildScripts {
 	public static LinkedList<String> sorted;
 	public static Map<String, Integer> visited;
 	
-	public static LinkedList<String> topoSort(Map<String, LinkedList<String>> graph, String start) {
+	/**
+	 * Topological sort in reversed order.
+	 */
+	public static LinkedList<String> topologicalSort(Map<String, LinkedList<String>> graph, String start) {
 		sorted = new LinkedList<>();
 		visited = new HashMap<>();
 		for (String node : graph.keySet()) {
@@ -93,7 +96,7 @@ public class BuildScripts {
 				}
 			}
 			visited.put(node, BLACK);
-			sorted.addLast(node);
+			sorted.addLast(node);	// we are doing it in reverse order
 		}
 		return true;
 	}
@@ -120,7 +123,7 @@ public class BuildScripts {
             }
         }
         
-        String sorted = topoSort(graph, target).toString();
+        String sorted = topologicalSort(graph, target).toString();
         sorted = sorted.substring(1, sorted.length() - 1);
         System.out.println(sorted.replaceAll(",\\s+", " ").trim());
 	}
