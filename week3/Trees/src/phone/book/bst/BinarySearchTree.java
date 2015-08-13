@@ -48,16 +48,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
             } else {
                 insertNode(root.left, newNode);
             }
-        } else if (newNode.item.compareTo(root.item) > 0) {
+        } else if (newNode.item.compareTo(root.item) >= 0) {	// >= supports equal elements
             if (root.right == null) {
                 root.right = newNode;
                 ++size;
             } else {
                 insertNode(root.right, newNode);
             }
-        } else {
-            root.item = newNode.item;   // rewrite equal items
         }
+//        } else {
+//            root.item = newNode.item;   // rewrite equal items
+//        }
     }
     
     public void insert(T elem) {

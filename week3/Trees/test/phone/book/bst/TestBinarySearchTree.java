@@ -106,17 +106,29 @@ public class TestBinarySearchTree {
 		return lo + (int) (rand.nextDouble() * (hi - lo));
 	}
 
-	public static class BstGenerator {
-		public static List<Integer> values;
-
-		public static Node<Integer> generateTree(int lo, int hi) {
-			values = new ArrayList<>();
+	/**
+	 * Generates a random binary search tree with unique values (no equality).
+	 */
+	public static class RandomBst {
+		private List<Integer> values;
+		private Node<Integer> root;
+		
+		public RandomBst(int lo, int hi) {
+			this.values = new ArrayList<>();
 			Node<Integer> root = new Node<>();
 			generateChildren(root, lo, hi);
-			return root;
+			this.root = root;
 		}
 
-		public static void generateChildren(Node<Integer> root, int lo, int hi) {
+		public Node<Integer> getRoot() {
+			return root;
+		}
+		
+		public List<Integer> getValues() {
+			return values;
+		}
+		
+		private void generateChildren(Node<Integer> root, int lo, int hi) {
 			int rand = randomRange(lo, hi);
 			values.add(rand);
 			root.item = rand;
@@ -143,7 +155,7 @@ public class TestBinarySearchTree {
 				return true;
 			}
 
-			if (root.item > left && root.item < right) {
+			if (root.item >= left && root.item <= right) {	// >= and <= supports equal elements in the BST
 				return isBSTRange(root.left, left, root.item) && isBSTRange(root.right, root.item, right);
 			}
 
@@ -154,46 +166,119 @@ public class TestBinarySearchTree {
 	@Test
 	public void testGenerator() {
 		for (int i = 0; i < 1000; i++) {
-			assertTrue(BstChecker.isBST(BstGenerator.generateTree(-1000, 1000)));
+			assertTrue(BstChecker.isBST(new RandomBst(-1000, 1000).getRoot()));
 		}
 	}
 	
 	@Test
-	public void testInsertAndSearch() {
+	public void testInsertSearchSize() {
 		BinarySearchTree<Integer> bst = new BinarySearchTree<>();
-		int item = 0;
+		assertTrue(BstChecker.isBST(bst.root));
+		assertEquals(0, bst.size());
 		
 		for (int i = 0; i < 1000; ++i) {
-			item = rand.nextInt();
-			bst.insert(item);
-			assertTrue(BstChecker.isBST(bst.root));
-			assertEquals(Integer.valueOf(item), bst.search(item));
+			testInsertValueAndSearch(bst, null);
+			assertEquals(i + 1, bst.size());
 		}
 	}
 	
-	public static void testRemoveAndSearch(int lo, int hi) {
+	public static void testInsertValueAndSearch(BinarySearchTree<Integer> bst, List<Integer> values) {
+		int item = rand.nextInt();
+		bst.insert(item);
+		assertTrue(BstChecker.isBST(bst.root));
+		assertEquals(Integer.valueOf(item), bst.search(item));
+		
+		if (values != null) {
+			values.add(item);
+		}
+	}
+	
+	public static void testRemoveSearchSize(int lo, int hi) {
 		BinarySearchTree<Integer> bst = new BinarySearchTree<>();
-		bst.root = BstGenerator.generateTree(lo, hi);
-		List<Integer> values = BstGenerator.values;
+		RandomBst randomTree = new RandomBst(lo, hi);
+		List<Integer> values = randomTree.getValues();
+		bst.root = randomTree.getRoot();
+		bst.size = values.size();
 //		BstPrinter.printNode(bst.root);
 		
-		int index = 0;
 		while (bst.root != null) {
-			index = randomRange(0, values.size() - 1);
-			assertEquals(values.get(index), bst.search(values.get(index)));
-			bst.remove(values.get(index));
-//			BstPrinter.printNode(bst.root);
-			assertTrue(BstChecker.isBST(bst.root));
-			assertEquals(null, bst.search(values.get(index)));
-			values.remove(index);
+			testRemoveRandomValue(bst, values);
 		}
+		
+		assertEquals(0, bst.size());
+		assertTrue(BstChecker.isBST(bst.root));
 	}
 	
 	@Test
-	public void testRemoveAndSearchBulk() {
-		for (int i = 0; i < 1000; i++) {
-			testRemoveAndSearch(-1000, 1000);
+	public void testRemoveSearchSizeBulk() {
+		for (int i = 0; i < 100; i++) {
+			testRemoveSearchSize(-1000, 1000);
 		}
 	}
 
+	@Test
+	public void testEqualElements() {
+		BinarySearchTree<Integer> bst = new BinarySearchTree<>();
+		final int COUNT = 9;
+
+		assertEquals(null, bst.search(1));
+		bst.insert(1);
+		assertEquals(Integer.valueOf(1), bst.search(1));
+		assertTrue(BstChecker.isBST(bst.root));
+		
+		for (int i = 0; i < COUNT; ++i) {
+			bst.insert(1);
+			assertEquals(Integer.valueOf(1), bst.search(1));
+			assertTrue(BstChecker.isBST(bst.root));
+		}
+		
+		for (int i = 0; i < COUNT; ++i) {
+			bst.remove(1);
+			assertEquals(Integer.valueOf(1), bst.search(1));
+			assertTrue(BstChecker.isBST(bst.root));
+		}
+		
+		assertEquals(Integer.valueOf(1), bst.search(1));
+		bst.remove(1);
+		assertEquals(null, bst.search(1));
+		assertTrue(BstChecker.isBST(bst.root));
+	}
+	
+	public static void testRemoveRandomValue(BinarySearchTree<Integer> bst, List<Integer> values) {
+		int index = randomRange(0, values.size() - 1);
+//		System.out.println("After removing " + values.get(index) + ": ");
+		assertEquals(values.get(index), bst.search(values.get(index)));
+		assertEquals(values.size(), bst.size());
+		bst.remove(values.get(index));
+//		BstPrinter.printNode(bst.root);
+		assertTrue(BstChecker.isBST(bst.root));
+		assertEquals(null, bst.search(values.get(index)));
+		values.remove(index);
+		assertEquals(values.size(), bst.size());
+	}
+	
+	public static void testTreeLifecycle(int lo, int hi, double removeProb, int maxSize) {
+		BinarySearchTree<Integer> bst = new BinarySearchTree<>();
+		assertTrue(BstChecker.isBST(bst.root));
+		RandomBst randomTree = new RandomBst(lo, hi);
+		List<Integer> values = randomTree.getValues();
+		bst.root = randomTree.getRoot();
+		bst.size = values.size();
+		
+		while (bst.root != null && bst.size() < maxSize) {
+			if (rand.nextDouble() < removeProb) {	// remove
+				testRemoveRandomValue(bst, values);
+			} else {	// insert
+				testInsertValueAndSearch(bst, values);
+			}
+		}
+	}
+	
+	@Test
+	public void testAllOperations() {
+		for (int i = 0; i < 100; ++i) {
+			testTreeLifecycle(-1000, 1000, 0.8, 100_000);
+		}
+	}
+	
 }
