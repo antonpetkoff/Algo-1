@@ -35,15 +35,17 @@ public class TestHashTable {
             assertTrue(ht.contains(temp));
         }
         
-//        for (int i = COUNT; i > 0; --i) {
-//        	temp = rand.nextInt(keys.size());
-//        	ht.remove(keys.get(temp));
-//        	assertEquals(Integer.valueOf(i - 1), Integer.valueOf(ht.size()));
-//        	assertFalse(ht.contains(keys.get(temp)));
-//        	keys.remove(temp);
-//        }
-//
-//        assertEquals(Integer.valueOf(0), Integer.valueOf(ht.size()));
+        for (int i = COUNT; i > 0; --i) {
+        	System.out.println(i);
+        	temp = rand.nextInt(keys.size());
+        	ht.remove(keys.get(temp));
+        	assertEquals(Integer.valueOf(i - 1), Integer.valueOf(ht.size()));
+        	System.out.println("assertFalse ht contains " + keys.get(temp));
+        	assertFalse(ht.contains(keys.get(temp)));
+        	keys.remove(temp);
+        }
+
+        assertEquals(Integer.valueOf(0), Integer.valueOf(ht.size()));
     }
 
 }

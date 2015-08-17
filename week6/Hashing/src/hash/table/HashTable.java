@@ -32,7 +32,13 @@ public class HashTable<K, V> {
         
         @Override
         public String toString() {
-        	return key + "=" + value;
+        	StringBuilder sb = new StringBuilder();
+        	Entry<K, V> temp = this;
+        	while (temp != null) {
+        		sb.append("{" + temp.key + "=" + temp.value + "} -> ");
+        		temp = temp.next;
+        	}
+        	return sb.toString();
         }
     }
 
@@ -103,19 +109,20 @@ public class HashTable<K, V> {
     }
 
     public V get(K key) {
-    	Entry<K, V> result = table[indexFor(key)];
+    	Entry<K, V> entry = table[indexFor(key)];
+    	V result = null;
     	
-    	if (result != null) {
-    		Entry<K, V> temp = result;
+    	if (entry != null) {
+    		Entry<K, V> temp = entry;
     		while (temp != null && !temp.key.equals(key)) {
     			temp = temp.next;
     		}
-    		result = temp;
+    		result = temp != null ? temp.value : null;
     	} else {
     		result = null;
     	}
     	
-    	return result.value;
+    	return result;
     }
     
     public boolean contains(K key) {
@@ -126,27 +133,38 @@ public class HashTable<K, V> {
     public void remove(K key) {
     	int index = indexFor(key);
     	Entry<K, V> entry = table[index];
+    	System.out.println("Removing: " + key);
+		System.out.println("Before removal: " + table[index]);
     	
-    	if (entry != null) {
-    		if (entry.next == null) {
-    			table[index] = null;
-    			--size;
-    		} else {
-    			Entry<K, V> previous = entry, temp = entry.next;
-    			while (temp != null && !temp.key.equals(key)) {
-    				previous = temp;
-    				temp = temp.next;
-    			}
-    			if (temp != null && key.equals(temp.key)) {
-    				if (temp.next != null) {	// previous -> temp -> another entry
-    					previous.next = temp.next;
-    				} else {					// previous -> temp -> null (end of list)
-    					previous.next = null;
-    				}
-    				--size;
-    			}
-    		}
+    	if (entry == null) {		// empty bin
+    		System.out.println("hit empty bin");
+    		return;
     	}
+
+    	if (entry.next == null) {	// only one node
+			table[index] = null;
+		} else {					// two or more nodes
+
+			
+			Entry<K, V> temp = entry, previous = null;
+			while (temp != null && !temp.key.equals(key)) {
+				previous = temp;
+				temp = temp.next;
+			}
+			
+			if (previous == null) {	// temp hasn't moved because entry.key is the same as key
+				previous = entry;
+			}
+			
+			Entry<K, V> replacement = previous.next;
+			previous.key = replacement.key;
+			previous.value = replacement.value;
+			previous.next = replacement.next;
+			
+		}
+    	
+    	--size;
+    	System.out.println("After removal: " + table[index]);
     }
 
 }
