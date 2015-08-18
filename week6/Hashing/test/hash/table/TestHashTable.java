@@ -20,7 +20,7 @@ public class TestHashTable {
     
     @Test
     public void testPutFindContainsSize() {
-    	final int COUNT = 1000000;
+    	final int COUNT = 10000;
         assertEquals(Integer.valueOf(0), Integer.valueOf(ht.size()));
         
         List<Integer> keys = new ArrayList<>();
