@@ -1,5 +1,8 @@
 package hash.table;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HashTable<K, V> {
 
     public static class Entry<K, V> {
@@ -94,11 +97,12 @@ public class HashTable<K, V> {
     }
 
     public void putAtIndex(Entry<K, V>[] table, int index, Entry<K, V> newEntry) {
-        Entry<K, V> entry = table[index], prev = entry;
+        Entry<K, V> entry = table[index];
 
-        if (prev != null) {
-            Entry<K, V> temp = prev.next;
+        if (entry != null) {
+            Entry<K, V> prev = entry, temp = prev.next;
             while (temp != null) {
+            	prev = temp;
                 temp = temp.next;
             }
             temp = newEntry;
@@ -129,12 +133,23 @@ public class HashTable<K, V> {
     	return get(key) != null;
     }
     
-    // XXX: TODO
+    public List<K> keys() {
+    	List<K> keys = new ArrayList<>();
+    	
+    	for (int i = 0; i < table.length; ++i) {
+            Entry<K, V> entry = table[i];
+            while (entry != null) {
+            	keys.add(entry.key);
+                entry = entry.next;
+            }
+        }
+    	
+    	return keys;
+    }
+    
     public void remove(K key) {
     	int index = indexFor(key);
     	Entry<K, V> entry = table[index];
-    	System.out.println("Removing: " + key);
-		System.out.println("Before removal: " + table[index]);
     	
     	if (entry == null) {		// empty bin
     		System.out.println("hit empty bin");
@@ -144,27 +159,24 @@ public class HashTable<K, V> {
     	if (entry.next == null) {	// only one node
 			table[index] = null;
 		} else {					// two or more nodes
-
-			
 			Entry<K, V> temp = entry, previous = null;
 			while (temp != null && !temp.key.equals(key)) {
 				previous = temp;
 				temp = temp.next;
 			}
+//			assert temp.key.equals(key);
+//			assert previous.next == temp;
 			
-			if (previous == null) {	// temp hasn't moved because entry.key is the same as key
-				previous = entry;
+			if (previous == null) {	// remove first node: entry.key is the same as key
+				entry = entry.next;
+				table[index] = entry;
+			} else {
+				previous.next = previous.next.next;
 			}
-			
-			Entry<K, V> replacement = previous.next;
-			previous.key = replacement.key;
-			previous.value = replacement.value;
-			previous.next = replacement.next;
-			
+
 		}
     	
     	--size;
-    	System.out.println("After removal: " + table[index]);
     }
 
 }

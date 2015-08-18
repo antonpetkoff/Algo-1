@@ -30,19 +30,26 @@ public class TestHashTable {
             temp = rand.nextInt();
             keys.add(temp);
             ht.put(temp, 1);
-            assertEquals(Integer.valueOf(i+1), Integer.valueOf(ht.size()));
-            assertEquals(Integer.valueOf(1), ht.get(temp));
             assertTrue(ht.contains(temp));
+            assertEquals(Integer.valueOf(1), ht.get(temp));
+            assertEquals(keys.size(), ht.size());
+            assertEquals(keys.size(), ht.keys().size());
         }
         
+        
+        
+        int index = 0;
         for (int i = COUNT; i > 0; --i) {
-        	System.out.println(i);
-        	temp = rand.nextInt(keys.size());
-        	ht.remove(keys.get(temp));
-        	assertEquals(Integer.valueOf(i - 1), Integer.valueOf(ht.size()));
-        	System.out.println("assertFalse ht contains " + keys.get(temp));
-        	assertFalse(ht.contains(keys.get(temp)));
-        	keys.remove(temp);
+        	index = rand.nextInt(keys.size());
+            assertEquals(keys.size(), ht.size());
+
+            assertTrue(ht.contains(keys.get(index)));
+        	ht.remove(keys.get(index));
+        	assertFalse(ht.contains(keys.get(index)));
+        	keys.remove(index);
+            
+        	assertEquals(keys.size(), ht.size());
+            System.out.println();
         }
 
         assertEquals(Integer.valueOf(0), Integer.valueOf(ht.size()));
