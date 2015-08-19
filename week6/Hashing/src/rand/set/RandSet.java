@@ -7,18 +7,18 @@ public class RandSet {
 
 	public static class Node {
 		public int key;
-		public int auxIndex;
+		public int indexInKeys;
 		public Node next;
 		
 		public Node(int k, int i, Node n) {
 			key = k;
-			auxIndex = i;
+			indexInKeys = i;
 			next = n;
 		}
 		
 		@Override
 		public int hashCode() {
-			return key ^ auxIndex;
+			return key ^ indexInKeys;
 		}
 		
 		@Override
@@ -28,7 +28,7 @@ public class RandSet {
 			}
 			if (obj instanceof Node) {
 				Node n = (Node) obj;
-				return key == n.key && auxIndex == n.auxIndex;
+				return key == n.key && indexInKeys == n.indexInKeys;
 			}
 			return false;
 		}
@@ -38,7 +38,7 @@ public class RandSet {
         	StringBuilder sb = new StringBuilder();
         	Node temp = this;
         	while (temp != null) {
-        		sb.append("{" + temp.key + ", [" + temp.auxIndex + "]} -> ");
+        		sb.append("{" + temp.key + ", [" + temp.indexInKeys + "]} -> ");
         		temp = temp.next;
         	}
         	return sb.toString(); 
@@ -82,6 +82,8 @@ public class RandSet {
         Node newNode = new Node(key, size, null);
         putAtIndex(bins, hash(key), newNode);
         keys[size++] = newNode.key;
+        
+        assert size < capacity;
     }
     
     public void resize(int newCapacity) {
@@ -97,7 +99,7 @@ public class RandSet {
         for (int i = 0; i < bins.length; ++i) {
             Node node = bins[i], newNode = null;
             while (node != null) {
-                newNode = new Node(node.key, node.auxIndex, null);
+                newNode = new Node(node.key, node.indexInKeys, null);
                 putAtIndex(newBins, hash(node.key), newNode);
                 node = node.next;
             }
@@ -131,21 +133,76 @@ public class RandSet {
     	return keys[rand.nextInt(size)];
     }
     
-    public boolean contains(int key) {
+    public Node getNode(int key) {
     	Node node = bins[hash(key)];
-    	Integer result = null;
     	
     	if (node != null) {
     		Node temp = node;
     		while (temp != null && temp.key != key) {
     			temp = temp.next;
     		}
-    		result = temp != null ? temp.key : null;
-    	} else {
-    		result = null;
+    		return temp;
     	}
     	
-    	return result != null;
+    	return null;
+    }
+    
+    public boolean contains(int key) {
+    	return getNode(key) != null;
+    }
+    
+    public void remove(int key) {
+    	int index = hash(key);
+    	Node node = bins[index];
+    	
+    	if (node == null) {
+    		return;
+    	}
+
+    	int removedIndex = 0;	// preserve removed node
+    	if (node.next == null) {	// only one node
+    		removedIndex = node.indexInKeys;
+    		bins[index] = null;
+    	} else {					// two or move nodes
+    		Node temp = node, prev = null;
+    		while (temp != null && temp.key != key) {
+    			prev = temp;
+    			temp = temp.next;
+    		}
+    		
+    		if (prev == null) {	// first node's key in bin == key
+    			removedIndex = node.indexInKeys;
+    			node = node.next;
+    			bins[index] = node;
+    		} else {
+    			removedIndex = prev.next.indexInKeys;
+    			prev.next = prev.next.next;
+    		}
+    	}
+    	
+    	// handle keys[] and size invariants
+    	// get last key node and replace it in keys[removedIndex]
+    	if (removedIndex == size - 1) {
+    		--size;		// removing last key
+    		System.out.println("removing last key, new size is " + size);
+    	} else {
+    		if (removedIndex >= size) {
+        		System.out.println(removedIndex + " " + size);
+        	}
+        	Node lastKeyNode = getNode(keys[size - 1]);
+//        	assert lastKeyNode != null;
+        	if (lastKeyNode == null) {		// TODO: Strange bug... this occurs very rarely, but it mustn't. Fix it!
+        		System.out.println("current last key in keys[] is " + keys[size - 1] + ", size is " + size);
+        		System.out.println("removedIndex is " + removedIndex);
+        		System.out.println("removing key " + key);
+        	}
+        	lastKeyNode.indexInKeys = removedIndex;
+        	keys[removedIndex] = keys[size - 1];
+        	--size;
+    	}
+    	
+
+
     }
 	
 }

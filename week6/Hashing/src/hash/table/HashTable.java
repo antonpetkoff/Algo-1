@@ -152,7 +152,6 @@ public class HashTable<K, V> {
     	Entry<K, V> entry = table[index];
     	
     	if (entry == null) {		// empty bin
-    		System.out.println("hit empty bin");
     		return;
     	}
 
