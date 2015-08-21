@@ -255,7 +255,7 @@ public class PhoneBook {
                 phoneBook.insert(new Contact(scanner.nextInt(), scanner.next()));
             } else if (temp.equals("lookup")) {
                 lookUpResult = phoneBook.lookup(scanner.next());
-                result.append((lookUpResult == NOT_FOUND ? "NOT_FOUND!" : lookUpResult) + "\n");
+                result.append((lookUpResult == NOT_FOUND ? "NOT FOUND!" : lookUpResult) + "\n");
             } else if (temp.equals("remove")) {
                 phoneBook.remove(scanner.next());
             } else if (temp.equals("list")) {
