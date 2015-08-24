@@ -55,7 +55,4 @@ public class Trie {
         return temp.isTerminal;
     }
     
-    
-    
-    
 }
