@@ -32,7 +32,7 @@ public class WordDictionary {
             
             Node temp = root;
             int i = 0, index = 0;
-            for (i = 0; i < word.length() - 1; ++i) {
+            for (i = 0; i < word.length(); ++i) {
                 index = word.charAt(i) - 'a';
                 if (temp.next[index] == null) {
                     temp.next[index] = new Node();
